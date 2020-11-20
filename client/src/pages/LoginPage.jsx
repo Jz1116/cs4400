@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -58,6 +58,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function LoginPage() {
   const classes = useStyles();
+  // states
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -82,6 +85,8 @@ export default function LoginPage() {
               name="username"
               autoComplete="username"
               autoFocus
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
             />
             <TextField
               variant="outlined"
@@ -93,6 +98,8 @@ export default function LoginPage() {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}

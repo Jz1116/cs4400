@@ -9,13 +9,14 @@ module.exports = {
     "airbnb",
     "plugin:prettier/recommended",
   ],
+  parser: "babel-eslint",
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
     },
     ecmaVersion: 12,
   },
-  plugins: ["react", "prettier"],
+  plugins: ["react", "prettier", "only-warn"],
   rules: {
     "prettier/prettier": [
       "error",
