@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -10,6 +10,9 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link } from "react-router-dom";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import StudentSignUp from "../components/StudentSignUp/StudentSignUp";
+import EmployeeSignUp from "../components/EmployeeSignUp/EmployeeSignUp";
 
 function Copyright() {
   return (
@@ -33,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: "100%",
     marginTop: theme.spacing(3),
   },
   submit: {
@@ -43,9 +46,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
+  const [status, setStatus] = useState("");
+  const [location, setLocation] = useState("");
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="sm">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -79,7 +84,19 @@ export default function SignUp() {
                 autoComplete="lname"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="username"
+                name="username"
+                variant="outlined"
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                autoFocus
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
                 required
@@ -90,7 +107,7 @@ export default function SignUp() {
                 autoComplete="email"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
                 required
@@ -102,6 +119,32 @@ export default function SignUp() {
                 autoComplete="current-password"
               />
             </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="Confirm Password"
+                label="Confirm Password"
+                type="password"
+                id="Confirm Password"
+                autoComplete="confirm-password"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <ButtonGroup
+                color="primary"
+                aria-label="large outlined primary button group"
+                fullWidth
+              >
+                <Button onClick={() => setStatus("student")}>Student</Button>
+                <Button onClick={() => setStatus("employee")}>Employee</Button>
+              </ButtonGroup>
+            </Grid>
+            {status === "student" && (
+              <StudentSignUp location={location} setLocation={setLocation} />
+            )}
+            {status === "employee" && <EmployeeSignUp />}
           </Grid>
           <Button
             type="submit"
