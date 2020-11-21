@@ -12,7 +12,7 @@ connection.connect(function(err) {
     console.log('Connected to the MySQL server.');
 });
 
-const location = 'West';
+const location = '"NULL"';
 const housing = 'NULL';
 const testing_site = 'NULL';
 const start_date = 'NULL';

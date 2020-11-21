@@ -12,10 +12,10 @@ connection.connect(function(err) {
     console.log('Connected to the MySQL server.');
 });
 
-const student_username = 'aallman302';
-const test_status = 'negative';
-const start_date = '2020-09-01';
-const end_date = '2020-09-10';
+const student_username = '"jpark29"';
+const test_status = 'NULL';
+const start_date = '"2020-09-01"';
+const end_date = '"2020-10-10"';
 
 let sql = `CALL student_view_results(${student_username}, ${test_status}, ${start_date}, ${end_date})`;
 

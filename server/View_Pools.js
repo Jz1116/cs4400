@@ -12,14 +12,12 @@ connection.connect(function(err) {
     console.log('Connected to the MySQL server.');
 });
 
-const username = '"gburdell1"';
-const testing_site = '"North Avenue (Centenial Room)"';
-const start_date = 'NULL';
-const end_date = '"2020-10-06"';
-const start_time = 'NULL';
-const end_time = 'NULL';
+const begin_process_date = '"1900-10-10"';
+const end_process_date = '"2020-12-12"';
+const pool_status = 'NULL';
+const processed_by = 'NULL';
 
-let sql = `CALL test_sign_up_filter(${username}, ${testing_site}, ${start_date}, ${end_date}, ${start_time}, ${end_time})`;
+let sql = `CALL view_pools(${begin_process_date}, ${end_process_date}, ${pool_status}, ${processed_by})`;
 
 connection.query(sql, true, (error, results, fields) => {
     if (error) {
@@ -28,7 +26,7 @@ connection.query(sql, true, (error, results, fields) => {
     console.log(results);
   });
 
-let sql_result = 'select * from test_sign_up_filter_result';
+let sql_result = 'select * from view_pools_result';
 
 connection.query(sql_result, true, (error, results, fields) => {
     if (error) {
