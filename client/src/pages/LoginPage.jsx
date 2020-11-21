@@ -12,6 +12,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+import WelcomeImage from "../img/welcomeImage.jpg";
 
 function Copyright() {
   return (
@@ -28,8 +29,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
   },
   image: {
-    backgroundImage:
-      "url(https://upload.wikimedia.org/wikipedia/commons/4/46/Kessler_Campanile%2C_Georgia_Tech.jpg)",
+    backgroundImage: `url(${WelcomeImage})`,
     backgroundColor:
       theme.palette.type === "light"
         ? theme.palette.grey[50]
