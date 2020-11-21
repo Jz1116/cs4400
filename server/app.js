@@ -3,15 +3,14 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mysql = require("mysql");
-
-const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
-
+const md5 = require("md5");
+const cors = require("cors");
+const api = require("./routes");
 require("dotenv").config();
 
 const app = express();
 
-const connection = mysql.createConnection({
+const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: process.env.MYSQL_PASSWORD,
@@ -19,7 +18,7 @@ const connection = mysql.createConnection({
   port: "3306",
 });
 
-connection.connect((err) => {
+db.connect((err) => {
   if (err) {
     throw err;
   } else {
@@ -31,9 +30,28 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(cors());
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/api", api);
+
+app.post("/api/login", (req, res) => {
+  const { username, password } = req.body;
+  const hashedPassword = md5(password);
+
+  db.query(
+    "Select * from user where username = ? and user_password = ?",
+    [username, hashedPassword],
+    (err, result) => {
+      if (err) {
+        res.send({ err });
+      }
+
+      if (result) {
+        res.send(result);
+      }
+    }
+  );
+});
 
 // Render React page
 app.use(express.static(path.join(__dirname, "../client/build/")));
