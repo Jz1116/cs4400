@@ -12,7 +12,9 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import WelcomeImage from "../img/welcomeImage.jpg";
+import { LOGIN_API_URL } from "../Constants";
 
 function Copyright() {
   return (
@@ -62,6 +64,20 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const loginUser = () => {
+    axios
+      .post(LOGIN_API_URL, {
+        username,
+        password,
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -106,11 +122,11 @@ export default function LoginPage() {
               label="Remember me"
             />
             <Button
-              type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
+              onClick={loginUser}
             >
               Sign In
             </Button>
