@@ -12,7 +12,10 @@ import Container from "@material-ui/core/Container";
 import MenuIcon from "@material-ui/icons/Menu";
 import List from "@material-ui/core/List";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
 import AdminListItems from "../components/ListItems/AdminListItems/AdminListItems";
+import AggregateResult from "../components/AggregateResult/AggregateResult";
 
 const drawerWidth = 240;
 
@@ -154,7 +157,15 @@ export default function Dashboard() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container} />
+        <Container maxWidth="lg" className={classes.container}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                <AggregateResult />
+              </Paper>
+            </Grid>
+          </Grid>
+        </Container>
       </main>
     </div>
   );
