@@ -39,16 +39,15 @@ app.post("/api/login", (req, res) => {
   const hashedPassword = md5(password);
 
   db.query(
-    "Select * from user where username = ? and user_password = ?",
+    "select covidtest_fall2020.login_status(?, ?) as status",
     [username, hashedPassword],
-    (err, result) => {
-      if (err) {
-        res.send({ err });
+    (error, result) => {
+      if (error) {
+        console.log(error);
       }
 
-      if (result) {
-        res.send(result);
-      }
+      const { status } = result[0];
+      res.send({ status });
     }
   );
 });

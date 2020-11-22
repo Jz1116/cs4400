@@ -11,7 +11,7 @@ import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 import WelcomeImage from "../img/welcomeImage.jpg";
 import { LOGIN_API_URL } from "../Constants";
@@ -63,6 +63,7 @@ export default function LoginPage() {
   // states
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [status, setStatus] = useState("");
 
   const loginUser = () => {
     axios
@@ -71,12 +72,28 @@ export default function LoginPage() {
         password,
       })
       .then((response) => {
-        console.log(response);
+        setStatus(response.data.status);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  if (status === "labtech/tester") {
+    return <Redirect to="/labtech+tester" />;
+  }
+  if (status === "labtech") {
+    return <Redirect to="/labtech" />;
+  }
+  if (status === "tester") {
+    return <Redirect to="/tester" />;
+  }
+  if (status === "admin") {
+    return <Redirect to="/admin" />;
+  }
+  if (status === "student") {
+    return <Redirect to="/student" />;
+  }
 
   return (
     <Grid container component="main" className={classes.root}>
