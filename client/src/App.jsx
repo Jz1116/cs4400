@@ -11,7 +11,7 @@ import LabTechTesterPage from "./pages/LabTechTesterPage";
 
 function App() {
   return (
-    <div className="App">
+    <div>
       <Switch>
         <Route path="/" exact component={LoginPage} />
         <Route path="/signup" component={SignUpPage} />
