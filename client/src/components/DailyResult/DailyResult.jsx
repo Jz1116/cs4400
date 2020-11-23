@@ -14,8 +14,8 @@ function createData(id, date, testsProcessed, positiveCount, positivePercent) {
 const rows = [
   createData(0, "9/1/20", 100, 5, "5.00%"),
   createData(1, "9/2/20", 200, 10, "5.00%"),
-  createData(3, "9/3/20", 100, 10, "10.00%"),
-  createData(4, "9/7/20", 400, 20, "5.00%"),
+  createData(2, "9/3/20", 100, 10, "10.00%"),
+  createData(3, "9/7/20", 400, 20, "5.00%"),
   createData(4, "9/10/20", 100, 8, "8.00%"),
 ];
 

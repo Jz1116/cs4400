@@ -11,9 +11,15 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import MenuIcon from "@material-ui/icons/Menu";
 import List from "@material-ui/core/List";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-
 import TesterListItems from "../components/ListItems/TesterListItems/TesterListItems";
+import AggregateResult from "../components/AggregateResult/AggregateResult";
+import ApptForm from "../components/ApptForm/ApptForm";
+import ApptTable from "../components/ApptTable/ApptTable";
+import DailyResult from "../components/DailyResult/DailyResult";
+import TestingSiteChange from "../components/TestingSiteChange/TestingSiteChange";
 
 const drawerWidth = 240;
 
@@ -99,11 +105,44 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [barStatus, setBarStatus] = React.useState("");
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const handleBarStatus = (status) => {
+    setBarStatus(status);
+  };
+
+  const statusMap = {
+    aggregate_result: (
+      <Paper className={classes.paper}>
+        <AggregateResult />
+      </Paper>
+    ),
+    create_an_appointment: (
+      <Paper className={classes.paper}>
+        <ApptForm />
+      </Paper>
+    ),
+    daily_result: (
+      <Paper className={classes.paper}>
+        <DailyResult />
+      </Paper>
+    ),
+    view_appointments: (
+      <Paper className={classes.paper}>
+        <ApptTable />
+      </Paper>
+    ),
+    change_site: (
+      <Paper className={classes.paper}>
+        <TestingSiteChange />
+      </Paper>
+    ),
   };
 
   return (
@@ -150,12 +189,20 @@ export default function Dashboard() {
           </IconButton>
         </div>
         <Divider />
-        <List>{TesterListItems}</List>
+        <List>
+          <TesterListItems handleBarStatus={handleBarStatus} />
+        </List>
         <Divider />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container} />
+        <Container maxWidth="lg" className={classes.container}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              {statusMap[barStatus]}
+            </Grid>
+          </Grid>
+        </Container>
       </main>
     </div>
   );

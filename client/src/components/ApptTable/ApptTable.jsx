@@ -15,10 +15,10 @@ function createData(id, date, time, site, location, user) {
 }
 
 const rows = [
-  createData(0, "8/17/20", "10:00 am", "Bobby Dodd", "East", "student1"),
-  createData(1, "8/17/20", "11:00 am", "Bobby Dodd", "East", ""),
-  createData(2, "8/17/20", "12:00 pm", "ECHO", "East", "student2"),
-  createData(3, "8/17/20", "1:00 pm", "North Pole", "West", ""),
+  createData("p0", "8/17/20", "10:00 am", "Bobby Dodd", "East", "student1"),
+  createData("p1", "8/17/20", "11:00 am", "Bobby Dodd", "East", ""),
+  createData("p2", "8/17/20", "12:00 pm", "ECHO", "East", "student2"),
+  createData("p3", "8/17/20", "1:00 pm", "North Pole", "West", ""),
 ];
 
 const useStyles = makeStyles((theme) => ({

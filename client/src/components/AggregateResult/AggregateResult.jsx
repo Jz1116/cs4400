@@ -15,9 +15,9 @@ function createData(id, type, num, percent) {
 }
 
 const rows = [
-  createData(0, "Positive", 450, "6.43%"),
-  createData(1, "Negative", 6550, "93.57%"),
-  createData(3, "Pending", 0, "0%"),
+  createData("a0", "Positive", 450, "6.43%"),
+  createData("a1", "Negative", 6550, "93.57%"),
+  createData("a2", "Pending", 0, "0%"),
 ];
 
 const useStyles = makeStyles((theme) => ({
