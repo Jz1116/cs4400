@@ -11,9 +11,13 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import MenuIcon from "@material-ui/icons/Menu";
 import List from "@material-ui/core/List";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-
 import StudentListItems from "../components/ListItems/StudentListItems/StudentListItems";
+import DailyResult from "../components/DailyResult/DailyResult";
+import AggregateResult from "../components/AggregateResult/AggregateResult";
+import MyResult from "../components/MyResult/MyResult";
 
 const drawerWidth = 240;
 
@@ -99,11 +103,34 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [barStatus, setBarStatus] = React.useState("");
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const handleBarStatus = (status) => {
+    setBarStatus(status);
+  };
+
+  const statusMap = {
+    aggregate_result: (
+      <Paper className={classes.paper}>
+        <AggregateResult />
+      </Paper>
+    ),
+    daily_result: (
+      <Paper className={classes.paper}>
+        <DailyResult />
+      </Paper>
+    ),
+    my_result: (
+      <Paper className={classes.paper}>
+        <MyResult />
+      </Paper>
+    ),
   };
 
   return (
@@ -150,12 +177,20 @@ export default function Dashboard() {
           </IconButton>
         </div>
         <Divider />
-        <List>{StudentListItems}</List>
+        <List>
+          <StudentListItems handleBarStatus={handleBarStatus} />
+        </List>
         <Divider />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container} />
+        <Container maxWidth="lg" className={classes.container}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              {statusMap[barStatus]}
+            </Grid>
+          </Grid>
+        </Container>
       </main>
     </div>
   );
