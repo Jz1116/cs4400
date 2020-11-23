@@ -21,7 +21,10 @@ export default function AdminListItems(props) {
         <ListItemIcon>
           <CalendarTodayIcon />
         </ListItemIcon>
-        <ListItemText primary="View Appointments" />
+        <ListItemText
+          primary="View Appointments"
+          onClick={() => handleBarStatus("view_appointments")}
+        />
       </ListItem>
       <ListItem button>
         <ListItemIcon>
