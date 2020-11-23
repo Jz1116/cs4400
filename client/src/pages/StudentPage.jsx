@@ -18,6 +18,7 @@ import StudentListItems from "../components/ListItems/StudentListItems/StudentLi
 import DailyResult from "../components/DailyResult/DailyResult";
 import AggregateResult from "../components/AggregateResult/AggregateResult";
 import MyResult from "../components/MyResult/MyResult";
+import RegisterTest from "../components/RegisterTest/RegisterTest";
 
 const drawerWidth = 240;
 
@@ -129,6 +130,11 @@ export default function Dashboard() {
     my_result: (
       <Paper className={classes.paper}>
         <MyResult />
+      </Paper>
+    ),
+    sign_up_test: (
+      <Paper className={classes.paper}>
+        <RegisterTest />
       </Paper>
     ),
   };
