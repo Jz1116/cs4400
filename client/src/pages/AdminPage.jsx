@@ -19,6 +19,7 @@ import AggregateResult from "../components/AggregateResult/AggregateResult";
 import TestingSiteForm from "../components/TestingSiteForm/TestingSiteForm";
 import ApptForm from "../components/ApptForm/ApptForm";
 import DailyResult from "../components/DailyResult/DailyResult";
+import ApptTable from "../components/ApptTable/ApptTable";
 
 const drawerWidth = 240;
 
@@ -136,6 +137,11 @@ export default function Dashboard() {
     daily_result: (
       <Paper className={classes.paper}>
         <DailyResult />
+      </Paper>
+    ),
+    view_appointments: (
+      <Paper className={classes.paper}>
+        <ApptTable />
       </Paper>
     ),
   };
