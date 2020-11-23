@@ -16,6 +16,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import AdminListItems from "../components/ListItems/AdminListItems/AdminListItems";
 import AggregateResult from "../components/AggregateResult/AggregateResult";
+import TestingSiteForm from "../components/TestingSiteForm/TestingSiteForm";
 
 const drawerWidth = 240;
 
@@ -118,6 +119,11 @@ export default function Dashboard() {
     aggregate_result: (
       <Paper className={classes.paper}>
         <AggregateResult />
+      </Paper>
+    ),
+    create_testing_site: (
+      <Paper className={classes.paper}>
+        <TestingSiteForm />
       </Paper>
     ),
   };
