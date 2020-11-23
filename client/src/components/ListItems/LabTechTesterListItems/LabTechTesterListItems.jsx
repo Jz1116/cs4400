@@ -9,57 +9,92 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import EditIcon from "@material-ui/icons/Edit";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 
-const LabTechTesterListItems = (
-  <div>
-    <ListItem button>
-      <ListItemIcon>
-        <AddIcon />
-      </ListItemIcon>
-      <ListItemText primary="Create Pool" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AddIcon />
-      </ListItemIcon>
-      <ListItemText primary="Create Appointments" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <EditIcon />
-      </ListItemIcon>
-      <ListItemText primary="Change Testing Site" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Process Pool" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <CalendarTodayIcon />
-      </ListItemIcon>
-      <ListItemText primary="View Appointments" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <PersonIcon />
-      </ListItemIcon>
-      <ListItemText primary="My Processed Tests" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Aggregate Results" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Daily Results" />
-    </ListItem>
-  </div>
-);
+export default function LabTechTesterListItems(props) {
+  const { handleBarStatus } = props;
 
-export default LabTechTesterListItems;
+  return (
+    <div>
+      <ListItem button>
+        <ListItemIcon>
+          <AddIcon />
+        </ListItemIcon>
+        <ListItemText
+          primary="Create Pool"
+          onClick={() => handleBarStatus("create_pool")}
+        />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <AddIcon />
+        </ListItemIcon>
+        <ListItemText
+          primary="Create Appointments"
+          onClick={() => handleBarStatus("create_an_appointment")}
+        />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <EditIcon />
+        </ListItemIcon>
+        <ListItemText
+          primary="Change Testing Site"
+          onClick={() => handleBarStatus("change_site")}
+        />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <AssignmentIcon />
+        </ListItemIcon>
+        <ListItemText
+          primary="Process Pool"
+          onClick={() => handleBarStatus("process_pool")}
+        />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <CalendarTodayIcon />
+        </ListItemIcon>
+        <ListItemText
+          primary="View Pools"
+          onClick={() => handleBarStatus("view_pools")}
+        />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <CalendarTodayIcon />
+        </ListItemIcon>
+        <ListItemText
+          primary="View Appointments"
+          onClick={() => handleBarStatus("view_appointments")}
+        />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <PersonIcon />
+        </ListItemIcon>
+        <ListItemText
+          primary="My Processed Tests"
+          onClick={() => handleBarStatus("my_processed_tests")}
+        />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+        <ListItemText
+          primary="Aggregate Results"
+          onClick={() => handleBarStatus("aggregate_result")}
+        />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+        <ListItemText
+          primary="Daily Results"
+          onClick={() => handleBarStatus("daily_result")}
+        />
+      </ListItem>
+    </div>
+  );
+}
