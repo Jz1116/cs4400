@@ -101,11 +101,25 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [barStatus, setBarStatus] = React.useState("");
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const handleBarStatus = (status) => {
+    setBarStatus(status);
+  };
+
+  const statusMap = {
+    aggregate_result: (
+      <Paper className={classes.paper}>
+        <AggregateResult />
+      </Paper>
+    ),
   };
 
   return (
@@ -152,7 +166,9 @@ export default function Dashboard() {
           </IconButton>
         </div>
         <Divider />
-        <List>{AdminListItems}</List>
+        <List>
+          <AdminListItems handleBarStatus={handleBarStatus} />
+        </List>
         <Divider />
       </Drawer>
       <main className={classes.content}>
@@ -160,9 +176,7 @@ export default function Dashboard() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <AggregateResult />
-              </Paper>
+              {statusMap[barStatus]}
             </Grid>
           </Grid>
         </Container>

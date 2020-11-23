@@ -7,45 +7,52 @@ import AddIcon from "@material-ui/icons/Add";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import EditIcon from "@material-ui/icons/Edit";
 
-const AdminListItems = (
-  <div>
-    <ListItem button>
-      <ListItemIcon>
-        <EditIcon />
-      </ListItemIcon>
-      <ListItemText primary="Reassign Testers" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <CalendarTodayIcon />
-      </ListItemIcon>
-      <ListItemText primary="View Appointments" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AddIcon />
-      </ListItemIcon>
-      <ListItemText primary="Create Appointments" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AddIcon />
-      </ListItemIcon>
-      <ListItemText primary="Create Testing Site" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Aggregate Results" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Daily Results" />
-    </ListItem>
-  </div>
-);
-
-export default AdminListItems;
+export default function AdminListItems(props) {
+  const { handleBarStatus } = props;
+  return (
+    <div>
+      <ListItem button>
+        <ListItemIcon>
+          <EditIcon />
+        </ListItemIcon>
+        <ListItemText primary="Reassign Testers" />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <CalendarTodayIcon />
+        </ListItemIcon>
+        <ListItemText primary="View Appointments" />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <AddIcon />
+        </ListItemIcon>
+        <ListItemText primary="Create Appointments" />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <AddIcon />
+        </ListItemIcon>
+        <ListItemText primary="Create Testing Site" />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+        <ListItemText
+          primary="Aggregate Results"
+          onClick={() => handleBarStatus("aggregate_result")}
+        />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+        <ListItemText
+          primary="Daily Results"
+          onClick={() => handleBarStatus("daily_result")}
+        />
+      </ListItem>
+    </div>
+  );
+}
