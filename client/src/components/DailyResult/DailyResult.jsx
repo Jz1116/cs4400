@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AggregateResults() {
+export default function DailyResult() {
   const classes = useStyles();
   return (
     <>

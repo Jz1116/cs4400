@@ -15,7 +15,10 @@ export default function AdminListItems(props) {
         <ListItemIcon>
           <EditIcon />
         </ListItemIcon>
-        <ListItemText primary="Reassign Testers" />
+        <ListItemText
+          primary="Reassign Testers"
+          onClick={() => handleBarStatus("reassign_testers")}
+        />
       </ListItem>
       <ListItem button>
         <ListItemIcon>

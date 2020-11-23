@@ -20,6 +20,7 @@ import TestingSiteForm from "../components/TestingSiteForm/TestingSiteForm";
 import ApptForm from "../components/ApptForm/ApptForm";
 import DailyResult from "../components/DailyResult/DailyResult";
 import ApptTable from "../components/ApptTable/ApptTable";
+import ReassignTester from "../components/ReassignTester/ReassignTester";
 
 const drawerWidth = 240;
 
@@ -142,6 +143,11 @@ export default function Dashboard() {
     view_appointments: (
       <Paper className={classes.paper}>
         <ApptTable />
+      </Paper>
+    ),
+    reassign_testers: (
+      <Paper className={classes.paper}>
+        <ReassignTester />
       </Paper>
     ),
   };
