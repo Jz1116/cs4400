@@ -94,11 +94,7 @@ export default function CreatePool() {
                       <TableCell>{row.id}</TableCell>
                       <TableCell>{row.dateTested}</TableCell>
                       <TableCell>
-                        <Checkbox
-                          defaultChecked
-                          color="primary"
-                          checked={row.isIncluded}
-                        />
+                        <Checkbox color="primary" checked={row.isIncluded} />
                       </TableCell>
                     </TableRow>
                   ))}

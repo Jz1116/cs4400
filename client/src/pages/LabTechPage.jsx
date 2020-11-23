@@ -20,6 +20,7 @@ import AggregateResult from "../components/AggregateResult/AggregateResult";
 import CreatePool from "../components/CreatePool/CreatePool";
 import MyProcessedTests from "../components/MyProcessedTests/MyProcessedTests";
 import ViewPools from "../components/ViewPools/ViewPools";
+import ProcessPool from "../components/ProcessPool/ProcessPool";
 
 const drawerWidth = 240;
 
@@ -142,6 +143,11 @@ export default function Dashboard() {
     view_pools: (
       <Paper className={classes.paper}>
         <ViewPools />
+      </Paper>
+    ),
+    process_pool: (
+      <Paper className={classes.paper}>
+        <ProcessPool />
       </Paper>
     ),
   };
