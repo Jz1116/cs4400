@@ -12,7 +12,10 @@ connection.connect(function(err) {
     console.log('Connected to the MySQL server.');
 });
 
-let sql = `CALL daily_results()`;
+const pool_id = '49';
+const test_id = '12345';
+
+let sql = `CALL create_pool(${pool_id}, ${test_id})`;
 
 connection.query(sql, true, (error, results, fields) => {
     if (error) {
@@ -20,14 +23,5 @@ connection.query(sql, true, (error, results, fields) => {
     }
     console.log(results);
   });
-
-let sql_result = 'select * from daily_results_result';
-
-connection.query(sql_result, true, (error, results, fields) => {
-    if (error) {
-      return console.error(error.message);
-    }
-    console.log(results);
-  });
-
+    
 connection.end();

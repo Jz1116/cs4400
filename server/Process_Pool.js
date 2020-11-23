@@ -12,18 +12,14 @@ connection.connect(function(err) {
     console.log('Connected to the MySQL server.');
 });
 
-let sql = `CALL daily_results()`;
+const pool_id = '88';
+const pool_status = '"positive"';
+const process_date = '"2020-12-14"';
+const processed_by = '"jhilborn98"';
+
+let sql = `CALL process_pool(${pool_id}, ${pool_status}, ${process_date}, ${processed_by})`;
 
 connection.query(sql, true, (error, results, fields) => {
-    if (error) {
-      return console.error(error.message);
-    }
-    console.log(results);
-  });
-
-let sql_result = 'select * from daily_results_result';
-
-connection.query(sql_result, true, (error, results, fields) => {
     if (error) {
       return console.error(error.message);
     }

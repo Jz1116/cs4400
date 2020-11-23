@@ -12,7 +12,15 @@ connection.connect(function(err) {
     console.log('Connected to the MySQL server.');
 });
 
-let sql = `CALL daily_results()`;
+const site_name = '"Test Site 1"';
+const street = '"test st"';
+const city = '"Atlanta"';
+const state = '"GA"';
+const zip = '"30318"';
+const location = '"East"';
+const tester_username = '"akarev16"';
+
+let sql = `CALL create_testing_site(${site_name}, ${street}, ${city}, ${state}, ${zip}, ${location}, ${tester_username})`;
 
 connection.query(sql, true, (error, results, fields) => {
     if (error) {
@@ -20,14 +28,5 @@ connection.query(sql, true, (error, results, fields) => {
     }
     console.log(results);
   });
-
-let sql_result = 'select * from daily_results_result';
-
-connection.query(sql_result, true, (error, results, fields) => {
-    if (error) {
-      return console.error(error.message);
-    }
-    console.log(results);
-  });
-
+    
 connection.end();
