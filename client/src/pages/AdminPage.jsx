@@ -17,6 +17,7 @@ import Paper from "@material-ui/core/Paper";
 import AdminListItems from "../components/ListItems/AdminListItems/AdminListItems";
 import AggregateResult from "../components/AggregateResult/AggregateResult";
 import TestingSiteForm from "../components/TestingSiteForm/TestingSiteForm";
+import ApptForm from "../components/ApptForm/ApptForm";
 
 const drawerWidth = 240;
 
@@ -124,6 +125,11 @@ export default function Dashboard() {
     create_testing_site: (
       <Paper className={classes.paper}>
         <TestingSiteForm />
+      </Paper>
+    ),
+    create_an_appointment: (
+      <Paper className={classes.paper}>
+        <ApptForm />
       </Paper>
     ),
   };
