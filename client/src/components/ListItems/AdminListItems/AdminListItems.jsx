@@ -33,7 +33,10 @@ export default function AdminListItems(props) {
         <ListItemIcon>
           <AddIcon />
         </ListItemIcon>
-        <ListItemText primary="Create Testing Site" />
+        <ListItemText
+          primary="Create Testing Site"
+          onClick={() => handleBarStatus("create_testing_site")}
+        />
       </ListItem>
       <ListItem button>
         <ListItemIcon>

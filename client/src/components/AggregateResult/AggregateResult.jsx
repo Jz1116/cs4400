@@ -30,7 +30,7 @@ const rows = [
   createData(3, "Pending", 0, "0%"),
 ];
 
-export default function Orders() {
+export default function AggregateResults() {
   const classes = useStyles();
   return (
     <>
