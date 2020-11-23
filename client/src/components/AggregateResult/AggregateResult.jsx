@@ -14,6 +14,12 @@ function createData(id, type, num, percent) {
   return { id, type, num, percent };
 }
 
+const rows = [
+  createData(0, "Positive", 450, "6.43%"),
+  createData(1, "Negative", 6550, "93.57%"),
+  createData(3, "Pending", 0, "0%"),
+];
+
 const useStyles = makeStyles((theme) => ({
   containerEnd: {
     paddingTop: theme.spacing(2),
@@ -23,12 +29,6 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "none",
   },
 }));
-
-const rows = [
-  createData(0, "Positive", 450, "6.43%"),
-  createData(1, "Negative", 6550, "93.57%"),
-  createData(3, "Pending", 0, "0%"),
-];
 
 export default function AggregateResults() {
   const classes = useStyles();

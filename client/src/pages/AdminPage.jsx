@@ -18,6 +18,7 @@ import AdminListItems from "../components/ListItems/AdminListItems/AdminListItem
 import AggregateResult from "../components/AggregateResult/AggregateResult";
 import TestingSiteForm from "../components/TestingSiteForm/TestingSiteForm";
 import ApptForm from "../components/ApptForm/ApptForm";
+import DailyResult from "../components/DailyResult/DailyResult";
 
 const drawerWidth = 240;
 
@@ -130,6 +131,11 @@ export default function Dashboard() {
     create_an_appointment: (
       <Paper className={classes.paper}>
         <ApptForm />
+      </Paper>
+    ),
+    daily_result: (
+      <Paper className={classes.paper}>
+        <DailyResult />
       </Paper>
     ),
   };
