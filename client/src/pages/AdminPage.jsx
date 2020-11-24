@@ -11,9 +11,11 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import MenuIcon from "@material-ui/icons/Menu";
 import List from "@material-ui/core/List";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
+import { Redirect } from "react-router-dom";
 import AdminListItems from "../components/ListItems/AdminListItems/AdminListItems";
 import AggregateResult from "../components/AggregateResult/AggregateResult";
 import TestingSiteForm from "../components/TestingSiteForm/TestingSiteForm";
@@ -21,6 +23,7 @@ import ApptForm from "../components/ApptForm/ApptForm";
 import DailyResult from "../components/DailyResult/DailyResult";
 import ApptTable from "../components/ApptTable/ApptTable";
 import ReassignTester from "../components/ReassignTester/ReassignTester";
+import WelcomePage from "../components/WelcomePage/WelcomePage";
 
 const drawerWidth = 240;
 
@@ -106,7 +109,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const [barStatus, setBarStatus] = React.useState("");
+  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [barStatus, setBarStatus] = React.useState("home");
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -150,7 +154,16 @@ export default function Dashboard() {
         <ReassignTester />
       </Paper>
     ),
+    home: (
+      <Paper className={classes.paper}>
+        <WelcomePage />
+      </Paper>
+    ),
   };
+
+  if (loggedIn === false) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div className={classes.root}>
@@ -181,6 +194,9 @@ export default function Dashboard() {
           >
             Admin Home
           </Typography>
+          <IconButton color="inherit" onClick={() => setLoggedIn(false)}>
+            <ExitToAppIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer

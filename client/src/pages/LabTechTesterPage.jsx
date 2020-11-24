@@ -14,6 +14,8 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import List from "@material-ui/core/List";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { Redirect } from "react-router-dom";
 import LabTechTesterItems from "../components/ListItems/LabTechTesterListItems/LabTechTesterListItems";
 import DailyResult from "../components/DailyResult/DailyResult";
 import AggregateResult from "../components/AggregateResult/AggregateResult";
@@ -24,6 +26,7 @@ import ProcessPool from "../components/ProcessPool/ProcessPool";
 import TestingSiteChange from "../components/TestingSiteChange/TestingSiteChange";
 import ApptForm from "../components/ApptForm/ApptForm";
 import ApptTable from "../components/ApptTable/ApptTable";
+import WelcomePage from "../components/WelcomePage/WelcomePage";
 
 const drawerWidth = 240;
 
@@ -109,7 +112,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const [barStatus, setBarStatus] = React.useState("");
+  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [barStatus, setBarStatus] = React.useState("home");
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -168,7 +172,16 @@ export default function Dashboard() {
         <ApptForm />
       </Paper>
     ),
+    home: (
+      <Paper className={classes.paper}>
+        <WelcomePage />
+      </Paper>
+    ),
   };
+
+  if (loggedIn === false) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div className={classes.root}>
@@ -199,6 +212,9 @@ export default function Dashboard() {
           >
             Lab Technician / Tester Home
           </Typography>
+          <IconButton color="inherit" onClick={() => setLoggedIn(false)}>
+            <ExitToAppIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer

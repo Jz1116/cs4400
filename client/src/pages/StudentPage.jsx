@@ -12,13 +12,16 @@ import Container from "@material-ui/core/Container";
 import MenuIcon from "@material-ui/icons/Menu";
 import List from "@material-ui/core/List";
 import Grid from "@material-ui/core/Grid";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Paper from "@material-ui/core/Paper";
+import { Redirect } from "react-router-dom";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import StudentListItems from "../components/ListItems/StudentListItems/StudentListItems";
 import DailyResult from "../components/DailyResult/DailyResult";
 import AggregateResult from "../components/AggregateResult/AggregateResult";
 import MyResult from "../components/MyResult/MyResult";
 import RegisterTest from "../components/RegisterTest/RegisterTest";
+import WelcomePage from "../components/WelcomePage/WelcomePage";
 
 const drawerWidth = 240;
 
@@ -104,7 +107,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const [barStatus, setBarStatus] = React.useState("");
+  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [barStatus, setBarStatus] = React.useState("home");
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -137,7 +141,16 @@ export default function Dashboard() {
         <RegisterTest />
       </Paper>
     ),
+    home: (
+      <Paper className={classes.paper}>
+        <WelcomePage />
+      </Paper>
+    ),
   };
+
+  if (loggedIn === false) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div className={classes.root}>
@@ -168,6 +181,9 @@ export default function Dashboard() {
           >
             Student Home
           </Typography>
+          <IconButton color="inherit" onClick={() => setLoggedIn(false)}>
+            <ExitToAppIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer

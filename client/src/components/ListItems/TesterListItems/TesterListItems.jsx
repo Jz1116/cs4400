@@ -6,12 +6,19 @@ import BarChartIcon from "@material-ui/icons/BarChart";
 import AddIcon from "@material-ui/icons/Add";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import EditIcon from "@material-ui/icons/Edit";
+import HomeIcon from "@material-ui/icons/Home";
 
 export default function TesterListItems(props) {
   const { handleBarStatus } = props;
 
   return (
     <div>
+      <ListItem button>
+        <ListItemIcon>
+          <HomeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Home" onClick={() => handleBarStatus("home")} />
+      </ListItem>
       <ListItem button>
         <ListItemIcon>
           <EditIcon />

@@ -7,12 +7,19 @@ import BarChartIcon from "@material-ui/icons/BarChart";
 import AddIcon from "@material-ui/icons/Add";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
+import HomeIcon from "@material-ui/icons/Home";
 
 export default function LabTechListItems(props) {
   const { handleBarStatus } = props;
 
   return (
     <div>
+      <ListItem button>
+        <ListItemIcon>
+          <HomeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Home" onClick={() => handleBarStatus("home")} />
+      </ListItem>
       <ListItem button>
         <ListItemIcon>
           <AssignmentIcon />

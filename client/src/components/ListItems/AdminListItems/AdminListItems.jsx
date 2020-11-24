@@ -5,12 +5,19 @@ import ListItemText from "@material-ui/core/ListItemText";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import AddIcon from "@material-ui/icons/Add";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
+import HomeIcon from "@material-ui/icons/Home";
 import EditIcon from "@material-ui/icons/Edit";
 
 export default function AdminListItems(props) {
   const { handleBarStatus } = props;
   return (
     <div>
+      <ListItem button>
+        <ListItemIcon>
+          <HomeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Home" onClick={() => handleBarStatus("home")} />
+      </ListItem>
       <ListItem button>
         <ListItemIcon>
           <EditIcon />

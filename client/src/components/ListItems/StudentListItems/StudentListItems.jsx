@@ -5,12 +5,19 @@ import ListItemText from "@material-ui/core/ListItemText";
 import PersonIcon from "@material-ui/icons/Person";
 import EventIcon from "@material-ui/icons/Event";
 import BarChartIcon from "@material-ui/icons/BarChart";
+import HomeIcon from "@material-ui/icons/Home";
 
 export default function StudentListItems(props) {
   const { handleBarStatus } = props;
 
   return (
     <div>
+      <ListItem button>
+        <ListItemIcon>
+          <HomeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Home" onClick={() => handleBarStatus("home")} />
+      </ListItem>
       <ListItem button>
         <ListItemIcon>
           <PersonIcon />
