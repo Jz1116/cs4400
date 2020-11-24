@@ -13,6 +13,8 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
+import Alert from "@material-ui/lab/Alert";
+import AlertTitle from "@material-ui/lab/AlertTitle";
 import WelcomeImage from "../img/welcomeImage.jpg";
 import { LOGIN_API_URL } from "../Constants";
 
@@ -60,12 +62,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function LoginPage() {
   const classes = useStyles();
-  // states
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [status, setStatus] = useState("");
 
-  const loginUser = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const username = formData.get("username");
+    const password = formData.get("password");
+
     axios
       .post(LOGIN_API_URL, {
         username,
@@ -107,19 +112,21 @@ export default function LoginPage() {
           <Typography component="h1" variant="h5">
             GT COVID-19 Testing
           </Typography>
-          <form className={classes.form} noValidate>
+          <form
+            className={classes.form}
+            noValidate
+            onSubmit={(event) => handleSubmit(event)}
+          >
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              id="Username"
+              id="username"
               label="Username"
               name="username"
               autoComplete="username"
               autoFocus
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
             />
             <TextField
               variant="outlined"
@@ -131,22 +138,21 @@ export default function LoginPage() {
               type="password"
               id="password"
               autoComplete="current-password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
             />
             <Button
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={loginUser}
+              type="submit"
             >
               Sign In
             </Button>
+            {status === "invalid username/password" ? (
+              <Alert severity="warning" onClose={() => setStatus("")}>
+                <AlertTitle>Wrong email/password. Try Again.</AlertTitle>
+              </Alert>
+            ) : null}
             <Grid container>
               <Grid item xs>
                 <Link to="/signup" variant="body2">

@@ -47,6 +47,7 @@ app.post("/api/login", (req, res) => {
       }
 
       const { status } = result[0];
+      console.log(status);
       res.send({ status });
     }
   );
