@@ -1,4 +1,4 @@
-# cs4400
+# GT Covid19 Testing Application
 ## Install Guide
 ### Pre-requisites:
 There is no required configuration of software and hardware that the customer must have before the installation process.
