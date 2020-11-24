@@ -23,13 +23,13 @@ router.get("/daily", (req, res) => {
     });
 
     const dailyResult = result.map((row) => {
-      const formalData = moment.utc(row.process_date).format("M/D/YY");
+      const formalDate = moment.utc(row.process_date).format("M/D/YY");
 
       return {
-        process_date: formalData,
+        process_date: formalDate,
         num_tests: row.num_tests,
         pos_tests: row.pos_tests,
-        pos_percent: row.pos_percent,
+        pos_percent: `${row.pos_percent}%`,
       };
     });
 
