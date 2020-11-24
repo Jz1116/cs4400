@@ -12,47 +12,35 @@ export default function StudentListItems(props) {
 
   return (
     <div>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("home")}>
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
-        <ListItemText primary="Home" onClick={() => handleBarStatus("home")} />
+        <ListItemText primary="Home" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("my_result")}>
         <ListItemIcon>
           <PersonIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="My Results"
-          onClick={() => handleBarStatus("my_result")}
-        />
+        <ListItemText primary="My Results" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("aggregate_result")}>
         <ListItemIcon>
           <BarChartIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="Aggregate Results"
-          onClick={() => handleBarStatus("aggregate_result")}
-        />
+        <ListItemText primary="Aggregate Results" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("daily_result")}>
         <ListItemIcon>
           <BarChartIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="Daily Results"
-          onClick={() => handleBarStatus("daily_result")}
-        />
+        <ListItemText primary="Daily Results" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("sign_up_test")}>
         <ListItemIcon>
           <EventIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="Sign Up for a Test"
-          onClick={() => handleBarStatus("sign_up_test")}
-        />
+        <ListItemText primary="Sign Up for a Test" />
       </ListItem>
     </div>
   );

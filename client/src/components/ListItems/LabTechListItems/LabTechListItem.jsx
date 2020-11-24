@@ -14,65 +14,47 @@ export default function LabTechListItems(props) {
 
   return (
     <div>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("home")}>
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
-        <ListItemText primary="Home" onClick={() => handleBarStatus("home")} />
+        <ListItemText primary="Home" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("process_pool")}>
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="Process Pool"
-          onClick={() => handleBarStatus("process_pool")}
-        />
+        <ListItemText primary="Process Pool" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("create_pool")}>
         <ListItemIcon>
           <AddIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="Create Pool"
-          onClick={() => handleBarStatus("create_pool")}
-        />
+        <ListItemText primary="Create Pool" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("view_pools")}>
         <ListItemIcon>
           <CalendarTodayIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="View Pools"
-          onClick={() => handleBarStatus("view_pools")}
-        />
+        <ListItemText primary="View Pools" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("my_processed_tests")}>
         <ListItemIcon>
           <PersonIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="My Processed Tests"
-          onClick={() => handleBarStatus("my_processed_tests")}
-        />
+        <ListItemText primary="My Processed Tests" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("aggregate_result")}>
         <ListItemIcon>
           <BarChartIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="Aggregate Results"
-          onClick={() => handleBarStatus("aggregate_result")}
-        />
+        <ListItemText primary="Aggregate Results" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("daily_result")}>
         <ListItemIcon>
           <BarChartIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="Daily Results"
-          onClick={() => handleBarStatus("daily_result")}
-        />
+        <ListItemText primary="Daily Results" />
       </ListItem>
     </div>
   );

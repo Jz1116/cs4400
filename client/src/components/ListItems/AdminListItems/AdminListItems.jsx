@@ -12,65 +12,47 @@ export default function AdminListItems(props) {
   const { handleBarStatus } = props;
   return (
     <div>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("home")}>
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
-        <ListItemText primary="Home" onClick={() => handleBarStatus("home")} />
+        <ListItemText primary="Home" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("reassign_testers")}>
         <ListItemIcon>
           <EditIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="Reassign Testers"
-          onClick={() => handleBarStatus("reassign_testers")}
-        />
+        <ListItemText primary="Reassign Testers" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("view_appointments")}>
         <ListItemIcon>
           <CalendarTodayIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="View Appointments"
-          onClick={() => handleBarStatus("view_appointments")}
-        />
+        <ListItemText primary="View Appointments" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("create_an_appointment")}>
         <ListItemIcon>
           <AddIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="Create Appointments"
-          onClick={() => handleBarStatus("create_an_appointment")}
-        />
+        <ListItemText primary="Create Appointments" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("create_testing_site")}>
         <ListItemIcon>
           <AddIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="Create Testing Site"
-          onClick={() => handleBarStatus("create_testing_site")}
-        />
+        <ListItemText primary="Create Testing Site" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("aggregate_result")}>
         <ListItemIcon>
           <BarChartIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="Aggregate Results"
-          onClick={() => handleBarStatus("aggregate_result")}
-        />
+        <ListItemText primary="Aggregate Results" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick={() => handleBarStatus("daily_result")}>
         <ListItemIcon>
           <BarChartIcon />
         </ListItemIcon>
-        <ListItemText
-          primary="Daily Results"
-          onClick={() => handleBarStatus("daily_result")}
-        />
+        <ListItemText primary="Daily Results" />
       </ListItem>
     </div>
   );
