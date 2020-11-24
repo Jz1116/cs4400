@@ -1,36 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import { makeStyles } from "@material-ui/core/styles";
+import axios from "axios";
+import { DAILY_RESULT_API_URL } from "../../Constants";
 import Title from "./components/Title";
 
-function createData(id, date, testsProcessed, positiveCount, positivePercent) {
-  return { id, date, testsProcessed, positiveCount, positivePercent };
-}
-
-const rows = [
-  createData(0, "9/1/20", 100, 5, "5.00%"),
-  createData(1, "9/2/20", 200, 10, "5.00%"),
-  createData(2, "9/3/20", 100, 10, "10.00%"),
-  createData(3, "9/7/20", 400, 20, "5.00%"),
-  createData(4, "9/10/20", 100, 8, "8.00%"),
-];
-
-const useStyles = makeStyles((theme) => ({
-  containerEnd: {
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
-  },
-  button: {
-    textTransform: "none",
-  },
-}));
-
 export default function DailyResult() {
-  const classes = useStyles();
+  const [dailyResult, setResult] = useState([]);
+
+  if (dailyResult.length === 0) {
+    axios.get(DAILY_RESULT_API_URL).then((response) => {
+      setResult(response.data);
+    });
+  }
+
   return (
     <>
       <Title>View Daily Results</Title>
@@ -44,12 +30,12 @@ export default function DailyResult() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.testsProcessed}</TableCell>
-              <TableCell>{row.positiveCount}</TableCell>
-              <TableCell>{row.positivePercent}</TableCell>
+          {dailyResult.map((row) => (
+            <TableRow key={row.process_date}>
+              <TableCell>{row.process_date}</TableCell>
+              <TableCell>{row.num_tests}</TableCell>
+              <TableCell>{row.pos_tests}</TableCell>
+              <TableCell>{row.pos_percent}</TableCell>
             </TableRow>
           ))}
         </TableBody>

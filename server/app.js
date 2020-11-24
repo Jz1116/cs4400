@@ -2,21 +2,12 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const mysql = require("mysql");
 const md5 = require("md5");
 const cors = require("cors");
 const api = require("./routes");
-require("dotenv").config();
+const db = require("./mysqldb");
 
 const app = express();
-
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.DATABASE,
-  port: "3306",
-});
 
 db.connect((err) => {
   if (err) {
