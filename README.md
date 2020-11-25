@@ -1,5 +1,5 @@
 # GT Covid19 Testing Application
-## Install Guide
+## Install Guide (Include instructions to setup the app and run the app)
 ### Pre-requisites:
 There is no required configuration of software and hardware that the customer must have before the installation process.
 
@@ -35,7 +35,13 @@ Then, the dependencies for the backend shall be installed
 2. Navigate to the server folder of the project in your terminal
 3. Type `npm install` in the terminal to install the dependencies
 
-The client also needs a .env file. Since this file contains private information for the sql database, it is not included in the Github repo. The client can contact us through email to get the file. The client should put the .env file **under the server folder**.
+The server also needs a .env file. Since this file contains private information for connecting to the sql database in mysql workbench (such as username, password, port number, etc), it is not included in the Github repo. The client can contact us through email to get the file, and he/she should put the .env file **under the server folder**.
 
 ### Run instructions:
-After the client completes all the above instructions, he/she can type `npm start` in the terminal under the server folder.
+After completing all the above instructions, he/she can type `npm start` in the terminal under the server folder.
+
+### Brief Description
+In the project, we make a responsive web application with React on the frontend and Node.js on the backend. We connect the backend with the database within MySQL Workbench in our local desktop, so that we are able to use the stored procedures that we have already implemented in phase 3. 
+
+### Work Distribution
+ChengShuang Yue works on the frontend design of the web pages. Yihua Xu and Zirui Wang work on implementing the basic logic for various functionalities. Zhen Jiang works on implementing the frontend web pages, set up the backend routing logic, and connect frontend and backend. 
