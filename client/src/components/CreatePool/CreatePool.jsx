@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -13,20 +13,9 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Checkbox from "@material-ui/core/Checkbox";
-
-function createData(id, dateTested, isIncluded) {
-  return { id, dateTested, isIncluded };
-}
-
-const rows = [
-  createData(1, "8/17/20", true),
-  createData(2, "8/17/20", true),
-  createData(3, "8/18/20", true),
-  createData(4, "8/20/20", true),
-  createData(5, "8/24/20", false),
-  createData(6, "8/28/20", false),
-  createData(7, "9/1/20", false),
-];
+import axios from "axios";
+import { toast } from "react-toastify";
+import * as Constants from "../../Constants";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -54,6 +43,52 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CreatePool() {
   const classes = useStyles();
+  const [tests, setTests] = useState([]);
+  const [getTest, setGetTest] = useState(false);
+
+  if (getTest === false) {
+    axios.get(Constants.ALL_TESTS_API_URL).then((response) => {
+      if (response.data.length === 0) {
+        toast.error("😢 There is no pending tests. Please come back later.");
+      } else {
+        setTests(response.data);
+      }
+      setGetTest(true);
+    });
+  }
+
+  const handleChange = (testId, event) => {
+    const selectedTest = tests.find((test) => test.testId === testId);
+    selectedTest.checked = event.target.checked;
+    setTests(tests);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const poolId = formData.get("poolId");
+    const selectedTests = [];
+    tests.forEach((test) => {
+      if (test.checked) {
+        selectedTests.push(test.testId);
+      }
+    });
+
+    const form = {
+      poolId,
+      selectedTests,
+    };
+
+    const encodedForm = JSON.stringify(form);
+    axios
+      .post(Constants.CREATE_POOL_API_URL, { encodedForm })
+      .then((response) => {
+        if (response.data.success) {
+          toast.success("😊 A new pool is created!");
+        }
+      });
+  };
 
   return (
     <Container component="main" maxWidth="sm">
@@ -62,7 +97,11 @@ export default function CreatePool() {
         <Typography component="h1" variant="h5">
           Create a Pool
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          noValidate
+          onSubmit={(event) => handleSubmit(event)}
+        >
           <Grid container spacing={2}>
             <Grid item sm={3}>
               <InputLabel className={classes.inputLabelPadding}>
@@ -71,7 +110,8 @@ export default function CreatePool() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                id="poolID"
+                id="poolId"
+                name="poolId"
                 fullWidth
                 autoFocus
                 variant="outlined"
@@ -88,17 +128,22 @@ export default function CreatePool() {
                     <TableCell>Include in Pool</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  {rows.map((row) => (
-                    <TableRow key={row.id}>
-                      <TableCell>{row.id}</TableCell>
-                      <TableCell>{row.dateTested}</TableCell>
-                      <TableCell>
-                        <Checkbox color="primary" checked={row.isIncluded} />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
+                {tests.length !== 0 && (
+                  <TableBody>
+                    {tests.map((test) => (
+                      <TableRow key={test.testId}>
+                        <TableCell>{test.testId}</TableCell>
+                        <TableCell>{test.date}</TableCell>
+                        <TableCell>
+                          <Checkbox
+                            color="primary"
+                            onChange={(e) => handleChange(test.testId, e)}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                )}
               </Table>
             </Grid>
           </Grid>

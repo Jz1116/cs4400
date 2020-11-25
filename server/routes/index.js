@@ -5,6 +5,8 @@ const result = require("./result");
 const tester = require("./tester");
 const site = require("./site");
 const appt = require("./appt");
+const test = require("./test");
+const pool = require("./pool");
 
 /* GET home page. */
 /** 
@@ -17,4 +19,6 @@ router.use("/result", result);
 router.use("/tester", tester);
 router.use("/site", site);
 router.use("/appt", appt);
+router.use("/test", test);
+router.use("/pool", pool);
 module.exports = router;
