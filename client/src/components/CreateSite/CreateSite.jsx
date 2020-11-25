@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -7,14 +7,15 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import MenuItem from "@material-ui/core/MenuItem";
+import axios from "axios";
+import { toast } from "react-toastify";
+import * as Constants from "../../Constants";
 
 const { UsaStates } = require("usa-states");
 
 const usStates = new UsaStates();
 const states = usStates.arrayOf("abbreviations");
-
 const locationTypes = ["East", "West"];
-const siteTesters = ["Zhen Jiang", "Yihua Xu", "Zirui Wang", "Shuangyue Cheng"];
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -22,10 +23,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: "100%",
@@ -37,8 +34,48 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TestingSiteForm() {
+export default function CreateSite() {
   const classes = useStyles();
+  const [location, setLocation] = useState("East");
+  const [siteTester, setTester] = useState("");
+  const [usaState, setUsaState] = useState("AL");
+  const [testers, setTesters] = useState([]);
+
+  if (testers.length === 0) {
+    axios.get(Constants.ALL_TESTERS_API_URL).then((response) => {
+      setTester(response.data[0][1]);
+      setTesters(response.data);
+    });
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const siteName = formData.get("siteName");
+    const address = formData.get("siteAddress");
+    const city = formData.get("city");
+    const zipCode = formData.get("zipCode");
+
+    const form = {
+      siteName,
+      address,
+      city,
+      usaState,
+      zipCode,
+      location,
+      siteTester,
+    };
+
+    const encodedForm = JSON.stringify(form);
+    axios
+      .post(Constants.CREATE_SITE_API_URL, { encodedForm })
+      .then((response) => {
+        if (response.data.success) {
+          toast.success("👌 A new testing site is created!");
+        }
+      });
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -47,7 +84,11 @@ export default function TestingSiteForm() {
         <Typography component="h1" variant="h5">
           Create a Testing Site
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          noValidate
+          onSubmit={(event) => handleSubmit(event)}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -95,7 +136,11 @@ export default function TestingSiteForm() {
                 required
               >
                 {states.map((state) => (
-                  <MenuItem key={state} value={state}>
+                  <MenuItem
+                    key={state}
+                    value={state}
+                    onClick={() => setUsaState(state)}
+                  >
                     {state}
                   </MenuItem>
                 ))}
@@ -124,30 +169,40 @@ export default function TestingSiteForm() {
                 defaultValue="East"
               >
                 {locationTypes.map((locationType) => (
-                  <MenuItem key={locationType} value={locationType}>
+                  <MenuItem
+                    key={locationType}
+                    value={locationType}
+                    onClick={() => setLocation(locationType)}
+                  >
                     {locationType}
                   </MenuItem>
                 ))}
               </TextField>
             </Grid>
-            <Grid item xs={12} sm={12}>
-              <TextField
-                id="siteTester"
-                select
-                label="Site Tester"
-                fullWidth
-                autoFocus
-                variant="outlined"
-                required
-                defaultValue="Zhen Jiang"
-              >
-                {siteTesters.map((siteTester) => (
-                  <MenuItem key={siteTester} value={siteTester}>
-                    {siteTester}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
+            {testers.length !== 0 && (
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  id="siteTester"
+                  select
+                  label="Site Tester"
+                  fullWidth
+                  autoFocus
+                  variant="outlined"
+                  required
+                  defaultValue={testers[0]}
+                >
+                  {testers.map((tester) => (
+                    <MenuItem
+                      key={tester[1]}
+                      value={tester[1]}
+                      onClick={() => setTester(tester[1])}
+                    >
+                      {tester[0]}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+            )}
           </Grid>
           <Button
             type="submit"

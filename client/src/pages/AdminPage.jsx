@@ -18,7 +18,7 @@ import Paper from "@material-ui/core/Paper";
 import { Redirect } from "react-router-dom";
 import AdminListItems from "../components/ListItems/AdminListItems/AdminListItems";
 import AggregateResult from "../components/AggregateResult/AggregateResult";
-import TestingSiteForm from "../components/TestingSiteForm/TestingSiteForm";
+import CreateSite from "../components/CreateSite/CreateSite";
 import ApptForm from "../components/ApptForm/ApptForm";
 import DailyResult from "../components/DailyResult/DailyResult";
 import ApptTable from "../components/ApptTable/ApptTable";
@@ -131,7 +131,7 @@ export default function Dashboard() {
     ),
     create_testing_site: (
       <Paper className={classes.paper}>
-        <TestingSiteForm />
+        <CreateSite />
       </Paper>
     ),
     create_an_appointment: (
