@@ -35,6 +35,12 @@ Then, the dependencies for the backend shall be installed
 2. Navigate to the server folder of the project in your terminal
 3. Type `npm install` in the terminal to install the dependencies
 
+After that, the database needs to be set up in the MySQL Workbench.
+1. Open the MySQL Workbench
+2. Go to the folder that contains the sql database information (-> server -> sql)
+3. Initialize the database with db_init.sql
+4. Add stored procedures and functions to the database with phase3_shell.sql
+
 The server also needs a .env file. Since this file contains private information for connecting to the sql database in mysql workbench (such as username, password, port number, etc), it is not included in the Github repo. The client can contact us through email to get the file, and he/she should put the .env file **under the server folder**.
 
 ### Run instructions:
