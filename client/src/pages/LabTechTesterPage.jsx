@@ -24,7 +24,7 @@ import MyProcessedTests from "../components/MyProcessedTests/MyProcessedTests";
 import ViewPools from "../components/ViewPools/ViewPools";
 import ProcessPool from "../components/ProcessPool/ProcessPool";
 import TestingSiteChange from "../components/TestingSiteChange/TestingSiteChange";
-import ApptForm from "../components/ApptForm/ApptForm";
+import CreateAppt from "../components/CreateAppt/CreateAppt";
 import ApptTable from "../components/ApptTable/ApptTable";
 import WelcomePage from "../components/WelcomePage/WelcomePage";
 
@@ -169,7 +169,7 @@ export default function Dashboard() {
     ),
     create_an_appointment: (
       <Paper className={classes.paper}>
-        <ApptForm />
+        <CreateAppt />
       </Paper>
     ),
     home: (

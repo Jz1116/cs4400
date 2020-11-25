@@ -19,7 +19,7 @@ import { Redirect } from "react-router-dom";
 import AdminListItems from "../components/ListItems/AdminListItems/AdminListItems";
 import AggregateResult from "../components/AggregateResult/AggregateResult";
 import CreateSite from "../components/CreateSite/CreateSite";
-import ApptForm from "../components/ApptForm/ApptForm";
+import CreateAppt from "../components/CreateAppt/CreateAppt";
 import DailyResult from "../components/DailyResult/DailyResult";
 import ApptTable from "../components/ApptTable/ApptTable";
 import ReassignTester from "../components/ReassignTester/ReassignTester";
@@ -136,7 +136,7 @@ export default function Dashboard() {
     ),
     create_an_appointment: (
       <Paper className={classes.paper}>
-        <ApptForm />
+        <CreateAppt />
       </Paper>
     ),
     daily_result: (
