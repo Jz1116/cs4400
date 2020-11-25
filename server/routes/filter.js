@@ -5,26 +5,26 @@ const db = require("../mysqldb");
 
 const router = express.Router();
 
-router.get("/result", (req, res) => {
-  /** 
+router.get("/test", (req, res) => {
+
   const { encodedForm } = req.body;
   const form = JSON.parse(encodedForm);
-  let { location, housing, testing_site, start_date, end_date } = form;
+  let { username,testing_site, start_date, end_date, start_time, end_time } = form;
 
   const str1 = "'";
 
-  if (location === "NULL") {
-    location = null;
+  if (start_time === "NULL") {
+    start_time = null;
   } else {
-    location = str1.concat(location);
-    location = location.concat(str1);
+    start_time = str1.concat(start_time);
+    start_time = start_time.concat(str1);
   }
 
-  if (housing === "NULL") {
-    housing = null;
+  if (end_time === "NULL") {
+    end_time = null;
   } else {
-    housing = str1.concat(housing);
-    housing = housing.concat(str1);
+    end_time = str1.concat(end_time);
+    end_time = end_time.concat(str1);
   }
 
   if (testing_site === "NULL") {
@@ -47,32 +47,41 @@ router.get("/result", (req, res) => {
     end_date = str1.concat(end_date);
     end_date = end_date.concat(str1);
   }
-*/
 
-  const getAggregateResult = `CALL aggregate_results(${location}, ${housing}, ${testing_site}, ${start_date}, ${end_date})`;
+  const test_sign_up = `CALL test_sign_up_filter(${username}, ${testing_site}, ${start_date}, ${end_date}, ${start_time}, ${end_time})`;
 
-  db.query(getAggregateResult, true, (error, result) => {
+  db.query(test_sign_up, true, (error, result) => {
     if (error) {
       console.error(error.message);
     }
   });
 
-  const displayResult = 'select * from aggregate_results_result';
+  const displayResult = 'select * from test_sign_up_filter_result';
 
   db.query(displayResult, true, (error, result) => {
     if (error) {
       console.error(error.message);
     }
 
-    const aggregateResult = result.map((row) => {
+    result.sort((a, b) => {
+        return new Date(a.appt_date) - new Date(b.appt_date);
+      });
+  
+      const sign_up_filter = result.map((row) => {
+        const formalDate = moment.utc(row.appt_date).format("M/D/YY");
 
       return {
-        test_status: row.test_status,
-        num_of_test: row.num_of_test,
-        percentage: `${row.percentage}%`,      };
+        appt_date: formalDate,
+        appt_time: row.appt_time,
+        street: row.street,
+        city:row.city,
+        state: row.state,
+        zip: row.zip,
+        site_name: row.site_name,
+        };
     });
 
-    res.status(200).json(aggregateResult);
+    res.status(200).json(sign_up_filter);
   });
 });
 

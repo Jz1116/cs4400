@@ -10,6 +10,8 @@ const student = require("./student");
 const explore = require("./explore");
 const aggregate = require("./aggregate");
 const filter = require("./filter");
+const testprocessed = require("./testprocessed");
+const viewpool = require("./viewpool");
 
 /* GET home page. */
 /** 
@@ -27,4 +29,6 @@ router.use("/student", student);
 router.use("/explore", explore);
 router.use("/aggregate", aggregate);
 router.use("/filter",filter);
+router.use("/testprocessed", testprocessed);
+router.use("/viewpool", viewpool);
 module.exports = router;
