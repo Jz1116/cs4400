@@ -1,3 +1,4 @@
+// daily_result
 const express = require("express");
 const moment = require("moment");
 const db = require("../mysqldb");
