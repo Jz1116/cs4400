@@ -44,4 +44,4 @@ After completing all the above instructions, he/she can type `npm start` in the 
 In the project, we make a responsive web application with React on the frontend and Node.js on the backend. We connect the backend with the database within MySQL Workbench in our local desktop, so that we are able to use the stored procedures that we have already implemented in phase 3. 
 
 ## Work Distribution
-ChengShuang Yue works on the frontend design of the web pages. Yihua Xu and Zirui Wang work on implementing the basic logic for various functionalities. Zhen Jiang works on implementing the frontend web pages, set up the backend routing logic, and connect frontend and backend. 
+Shuangyue Cheng works on the frontend design of the web pages. Yihua Xu and Zirui Wang work on implementing the basic logic for various functionalities. Zhen Jiang works on implementing the frontend web pages, set up the backend routing logic, and connect frontend and backend. 
