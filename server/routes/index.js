@@ -12,6 +12,7 @@ const aggregate = require("./aggregate");
 const filter = require("./filter");
 const testprocessed = require("./testprocessed");
 const viewpool = require("./viewpool");
+const registeremployee = require("./registeremployee");
 
 /* GET home page. */
 /** 
@@ -31,4 +32,5 @@ router.use("/aggregate", aggregate);
 router.use("/filter",filter);
 router.use("/testprocessed", testprocessed);
 router.use("/viewpool", viewpool);
+router.use("/registeremployee", registeremployee);
 module.exports = router;
