@@ -18,7 +18,7 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { Redirect } from "react-router-dom";
 import TesterListItems from "../components/ListItems/TesterListItems/TesterListItems";
 import AggregateResult from "../components/AggregateResult/AggregateResult";
-import ApptForm from "../components/ApptForm/ApptForm";
+import CreateAppt from "../components/CreateAppt/CreateAppt";
 import ApptTable from "../components/ApptTable/ApptTable";
 import DailyResult from "../components/DailyResult/DailyResult";
 import TestingSiteChange from "../components/TestingSiteChange/TestingSiteChange";
@@ -129,7 +129,7 @@ export default function Dashboard() {
     ),
     create_an_appointment: (
       <Paper className={classes.paper}>
-        <ApptForm />
+        <CreateAppt />
       </Paper>
     ),
     daily_result: (

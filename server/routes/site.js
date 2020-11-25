@@ -26,4 +26,23 @@ router.post("/create", (req, res) => {
   });
 });
 
+router.get("/all", (req, res) => {
+  const getAllSites = `SELECT site_name from site`;
+
+  db.query(getAllSites, true, (error, result) => {
+    if (error) {
+      console.error(error.message);
+    }
+
+    const sites = [];
+    result.forEach((site) => {
+      if (site.site_name.length !== 0) {
+        sites.push(site.site_name);
+      }
+    });
+
+    res.status(200).json(sites);
+  });
+});
+
 module.exports = router;
