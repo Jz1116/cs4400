@@ -13,9 +13,13 @@ const filter = require("./filter");
 const testprocessed = require("./testprocessed");
 const viewpool = require("./viewpool");
 const registeremployee = require("./registeremployee");
-const registerstudent = require("./registerstudent")
-const testsignup = require("./testsignup")
-const assigntesttopool = require("./assigntesttopool")
+const registerstudent = require("./registerstudent");
+const testsignup = require("./testsignup");
+const assigntesttopool = require("./assigntesttopool");
+const processpool = require("./processpool");
+const processtest = require("./processtest");
+const viewappointment = require("./viewappointment");
+const viewtesters = require("./viewtesters");
 
 /* GET home page. */
 /** 
@@ -39,4 +43,8 @@ router.use("/registeremployee", registeremployee);
 router.use("/registerstudent", registerstudent);
 router.use("/testsignup", testsignup);
 router.use("/assigntesttopool", assigntesttopool);
+router.use("/processpool", processpool);
+router.use("/processtest", processtest);
+router.use("/viewappointment", viewappointment);
+router.use("/viewtesters", viewtesters);
 module.exports = router;
