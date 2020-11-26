@@ -9,18 +9,15 @@ import CheckBoxIcon from "@material-ui/icons/CheckBox";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-const jobs = [
-  { label: "Site Tester", value: "Site Tester" },
-  { label: "Lab Tech", value: "Lab Tech" },
-];
+const jobs = ["Site Tester", "Lab Tech"];
 
-export default function EmployeeSignUp() {
+export default function EmployeeSignUp(props) {
   return (
     <>
       <Grid item xs={12} sm={6}>
         <TextField
           autoComplete="Phone No."
-          name="Phone No."
+          name="phoneNum"
           variant="outlined"
           required
           fullWidth
@@ -32,10 +29,10 @@ export default function EmployeeSignUp() {
       <Grid item xs={12} sm={6}>
         <Autocomplete
           multiple
-          id="checkboxes-tags-demo"
           options={jobs}
+          onChange={(event, value) => props.setJobTypes(value)}
           disableCloseOnSelect
-          getOptionLabel={(option) => option.label}
+          getOptionLabel={(option) => option}
           renderOption={(option, { selected }) => (
             <>
               <Checkbox
@@ -44,7 +41,7 @@ export default function EmployeeSignUp() {
                 style={{ marginRight: 8 }}
                 checked={selected}
               />
-              {option.label}
+              {option}
             </>
           )}
           renderInput={(params) => (

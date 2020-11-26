@@ -8,6 +8,7 @@ const appt = require("./appt");
 const test = require("./test");
 const pool = require("./pool");
 const student = require("./student");
+const employee = require("./employee");
 
 /* GET home page. */
 /** 
@@ -23,4 +24,5 @@ router.use("/appt", appt);
 router.use("/test", test);
 router.use("/pool", pool);
 router.use("/student", student);
+router.use("/employee", employee);
 module.exports = router;

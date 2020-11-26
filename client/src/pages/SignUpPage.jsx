@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { LocalConvenienceStoreOutlined } from "@material-ui/icons";
 import StudentSignUp from "../components/StudentSignUp/StudentSignUp";
 import EmployeeSignUp from "../components/EmployeeSignUp/EmployeeSignUp";
 import * as Constants from "../Constants";
@@ -52,6 +53,7 @@ export default function SignUp() {
   const [status, setStatus] = useState("");
   const [location, setLocation] = useState("East");
   const [housing, setHousing] = useState("Greek Housing");
+  const [jobTypes, setJobTypes] = useState([]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -80,6 +82,36 @@ export default function SignUp() {
           if (response.data.success) {
             toast.success(
               "👏 A student account has already been created! Please go back to the sign in page to login with your username and password."
+            );
+          }
+        });
+    } else if (status === "employee") {
+      const formData = new FormData(event.target);
+      const firstName = formData.get("firstName");
+      const lastName = formData.get("lastName");
+      const username = formData.get("username");
+      const email = formData.get("email");
+      const password = formData.get("password");
+      const phoneNum = formData.get("phoneNum");
+
+      const form = {
+        fname: firstName,
+        lname: lastName,
+        username,
+        email,
+        password,
+        phoneNum,
+        isLabTech: jobTypes.includes("Lab Tech"),
+        isTester: jobTypes.includes("Site Tester"),
+      };
+
+      const encodedForm = JSON.stringify(form);
+      axios
+        .post(Constants.CREATE_EMPLOYEE_API_URL, { encodedForm })
+        .then((response) => {
+          if (response.data.success) {
+            toast.success(
+              "👏 An employee account has already been created! Please go back to the sign in page to login with your username and password."
             );
           }
         });
@@ -188,7 +220,9 @@ export default function SignUp() {
                 setLocation={setLocation}
               />
             )}
-            {status === "employee" && <EmployeeSignUp />}
+            {status === "employee" && (
+              <EmployeeSignUp setJobTypes={setJobTypes} />
+            )}
           </Grid>
           <Button
             type="submit"
