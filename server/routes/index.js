@@ -15,6 +15,7 @@ const viewpool = require("./viewpool");
 const registeremployee = require("./registeremployee");
 const registerstudent = require("./registerstudent")
 const testsignup = require("./testsignup")
+const assigntesttopool = require("./assigntesttopool")
 
 /* GET home page. */
 /** 
@@ -37,4 +38,5 @@ router.use("/viewpool", viewpool);
 router.use("/registeremployee", registeremployee);
 router.use("/registerstudent", registerstudent);
 router.use("/testsignup", testsignup);
+router.use("/assigntesttopool", assigntesttopool);
 module.exports = router;

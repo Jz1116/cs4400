@@ -1,15 +1,16 @@
-// test_sign_up
+// assign test to pool
 const express = require("express");
 const db = require("../mysqldb");
 
 const router = express.Router();
 
 router.post("/done", (req, res) => {
+
   const { encodedForm } = req.body;
   const form = JSON.parse(encodedForm);
-  const { username, site_name, appt_date, appt_time, test_id } = form;
+  const { pool_id, test_id } = form;
 
-  const sql = `CALL test_sign_up(${username}, ${site_name}, ${appt_date}, ${appt_time}, ${test_id})`;
+  const sql = `CALL assign_test_to_pool(${pool_id}, ${test_id})`;
     
   db.query(sql, true, (error) => {
     if (error) {
