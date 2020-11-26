@@ -77,8 +77,7 @@ export default function SignUp() {
       axios
         .post(Constants.CREATE_STUDENT_API_URL, { encodedForm })
         .then((response) => {
-          if (response.data) {
-            console.log(response.data);
+          if (response.data.success) {
             toast.success(
               "👏 A student account has already been created! Please go back to the sign in page to login with your username and password."
             );
