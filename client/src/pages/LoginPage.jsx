@@ -61,12 +61,14 @@ const useStyles = makeStyles((theme) => ({
 export default function LoginPage() {
   const classes = useStyles();
   const [status, setStatus] = useState("");
+  const [name, setName] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     const formData = new FormData(event.target);
     const username = formData.get("username");
+    setName(username);
     const password = formData.get("password");
 
     axios
@@ -83,19 +85,54 @@ export default function LoginPage() {
   };
 
   if (status === "labtech/tester") {
-    return <Redirect to="/labtech+tester" />;
+    return (
+      <Redirect
+        to={{
+          pathname: "/labtech+tester",
+          state: { name },
+        }}
+      />
+    );
   }
   if (status === "labtech") {
-    return <Redirect to="/labtech" />;
+    return (
+      <Redirect
+        to={{
+          pathname: "/labtech",
+          state: { name },
+        }}
+      />
+    );
   }
   if (status === "tester") {
-    return <Redirect to="/tester" />;
+    return (
+      <Redirect
+        to={{
+          pathname: "/tester",
+          state: { name },
+        }}
+      />
+    );
   }
   if (status === "admin") {
-    return <Redirect to="/admin" />;
+    return (
+      <Redirect
+        to={{
+          pathname: "/admin",
+          state: { name },
+        }}
+      />
+    );
   }
   if (status === "student") {
-    return <Redirect to="/student" />;
+    return (
+      <Redirect
+        to={{
+          pathname: "/student",
+          state: { name },
+        }}
+      />
+    );
   }
 
   return (
