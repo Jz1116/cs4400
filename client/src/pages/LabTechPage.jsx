@@ -106,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+export default function Dashboard(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const [loggedIn, setLoggedIn] = React.useState(true);
@@ -141,7 +141,7 @@ export default function Dashboard() {
     ),
     my_processed_tests: (
       <Paper className={classes.paper}>
-        <MyProcessedTests />
+        <MyProcessedTests username={props.location.state.name} />
       </Paper>
     ),
     view_pools: (

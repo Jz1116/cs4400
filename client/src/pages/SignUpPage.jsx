@@ -13,7 +13,6 @@ import { Link } from "react-router-dom";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { LocalConvenienceStoreOutlined } from "@material-ui/icons";
 import StudentSignUp from "../components/StudentSignUp/StudentSignUp";
 import EmployeeSignUp from "../components/EmployeeSignUp/EmployeeSignUp";
 import * as Constants from "../Constants";

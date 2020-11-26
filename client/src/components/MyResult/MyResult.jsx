@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 export default function MyResult(props) {
   const classes = useStyles();
   const [testStatus, setTestStatus] = useState("All");
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState([]);
   const [status, setStatus] = useState(false);
 
   const initializeResult = () => {
