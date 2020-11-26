@@ -8,6 +8,7 @@ export const TEST_API_URL = `${API_URL}/test`;
 export const SITE_API_URL = `${API_URL}/site`;
 export const APPT_API_URL = `${API_URL}/appt`;
 export const POOL_API_URL = `${API_URL}/pool`;
+export const POOL_RESULT_API_URL = `${POOL_API_URL}/result`;
 export const CREATE_POOL_API_URL = `${POOL_API_URL}/create`;
 export const CREATE_APPT_API_URL = `${APPT_API_URL}/create`;
 export const ALL_TESTS_API_URL = `${TEST_API_URL}/all`;

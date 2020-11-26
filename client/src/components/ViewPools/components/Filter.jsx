@@ -5,7 +5,24 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 
-const statusOptions = ["All", "Positive", "Negative", "Pending"];
+const statusOptions = [
+  {
+    value: "All",
+    label: "All",
+  },
+  {
+    value: "positive",
+    label: "Positive",
+  },
+  {
+    value: "negative",
+    label: "Negative",
+  },
+  {
+    value: "pending",
+    label: "Pending",
+  },
+];
 
 const useStyles = makeStyles((theme) => ({
   containerStart: {
@@ -25,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Filter() {
+export default function Filter(props) {
   const classes = useStyles();
   return (
     <>
@@ -41,8 +58,12 @@ export default function Filter() {
             defaultValue="All"
           >
             {statusOptions.map((statusOption) => (
-              <MenuItem key={statusOption} value={statusOption}>
-                {statusOption}
+              <MenuItem
+                key={statusOption.label}
+                value={statusOption.value}
+                onClick={() => props.setPoolStatus(statusOption.value)}
+              >
+                {statusOption.label}
               </MenuItem>
             ))}
           </TextField>

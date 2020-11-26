@@ -40,7 +40,7 @@ export default function AggregateResults() {
     return total;
   };
 
-  if (status === false) {
+  const initializeResult = () => {
     const form = {
       startDate: null,
       endDate: null,
@@ -58,6 +58,10 @@ export default function AggregateResults() {
         setStatus(true);
         setResult(response.data);
       });
+  };
+
+  if (status === false) {
+    initializeResult();
   }
 
   const handleSubmit = (event) => {
@@ -141,6 +145,7 @@ export default function AggregateResults() {
               color="default"
               className={classes.button}
               fullWidth
+              onClick={() => initializeResult()}
             >
               Reset
             </Button>
