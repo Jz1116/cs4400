@@ -109,7 +109,7 @@ export default function Dashboard(props) {
   const [open, setOpen] = React.useState(true);
   const [loggedIn, setLoggedIn] = React.useState(true);
   const [barStatus, setBarStatus] = React.useState("home");
-  console.log(props.location.state.name);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -134,7 +134,7 @@ export default function Dashboard(props) {
     ),
     my_result: (
       <Paper className={classes.paper}>
-        <MyResult />
+        <MyResult username={props.location.state.name} />
       </Paper>
     ),
     sign_up_test: (
