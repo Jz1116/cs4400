@@ -9,7 +9,7 @@ router.post("/done", (req, res) => {
   const form = JSON.parse(encodedForm);
   const { username, site_name, appt_date, appt_time, test_id } = form;
 
-  const sql = `CALL test_sign_up(${username}, ${site_name}, ${appt_date}, ${appt_time}, ${test_id})`;
+  const sql = `CALL test_sign_up('${username}', '${site_name}', '${appt_date}', '${appt_time}', '${test_id}')`;
     
   db.query(sql, true, (error) => {
     if (error) {

@@ -11,7 +11,7 @@ router.get("/result", (req, res) => {
   const form = JSON.parse(encodedForm);
   let { test_id } = form;
 
-  const exploreResult = `CALL explore_results(${test_id})`;
+  const exploreResult = `CALL explore_results('${test_id}')`;
 
   db.query(exploreResult, true, (error, result) => {
     if (error) {

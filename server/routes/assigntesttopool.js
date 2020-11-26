@@ -10,7 +10,7 @@ router.post("/done", (req, res) => {
   const form = JSON.parse(encodedForm);
   const { pool_id, test_id } = form;
 
-  const sql = `CALL assign_test_to_pool(${pool_id}, ${test_id})`;
+  const sql = `CALL assign_test_to_pool('${pool_id}', '${test_id}')`;
     
   db.query(sql, true, (error) => {
     if (error) {

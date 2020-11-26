@@ -1,16 +1,17 @@
-// register_employee
+// assign_tester
 const express = require("express");
 const db = require("../mysqldb");
 
 const router = express.Router();
 
 router.post("/done", (req, res) => {
+
   const { encodedForm } = req.body;
   const form = JSON.parse(encodedForm);
-  const { username, email, fname, lname, phone, labtech, site_tester, hashedpassword } = form;
+  const { tester_username, site_name } = form;
 
-  const sql = `CALL register_employee('${username}', '${email}', '${fname}', '${lname}', '${phone}', '${labtech}', '${site_tester}', '${hashedpassword}')`;
-
+  const sql = `CALL assign_tester('${tester_username}', '${site_name}')`;
+    
   db.query(sql, true, (error) => {
     if (error) {
       console.error(error.message);

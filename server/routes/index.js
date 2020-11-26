@@ -20,7 +20,11 @@ const processpool = require("./processpool");
 const processtest = require("./processtest");
 const viewappointment = require("./viewappointment");
 const viewtesters = require("./viewtesters");
-
+const poolmeta = require("./poolmeta");
+const testsinpool = require("./testsinpool");
+const testerassignsite = require("./testerassignsite");
+const assigntester = require("./assigntester");
+const unassigntester = require("./unassigntester");
 /* GET home page. */
 /** 
 router.get("/", function (req, res, next) {
@@ -47,4 +51,9 @@ router.use("/processpool", processpool);
 router.use("/processtest", processtest);
 router.use("/viewappointment", viewappointment);
 router.use("/viewtesters", viewtesters);
+router.use("/poolmeta", poolmeta);
+router.use("/testsinpool", testsinpool);
+router.use("/testerassignsite", testerassignsite);
+router.use("/assigntester", assigntester);
+router.use("/unassigntester", unassigntester);
 module.exports = router;
