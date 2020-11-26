@@ -11,8 +11,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link } from "react-router-dom";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import { toast } from "react-toastify";
+import axios from "axios";
 import StudentSignUp from "../components/StudentSignUp/StudentSignUp";
 import EmployeeSignUp from "../components/EmployeeSignUp/EmployeeSignUp";
+import * as Constants from "../Constants";
 
 function Copyright() {
   return (
@@ -47,7 +50,42 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp() {
   const classes = useStyles();
   const [status, setStatus] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState("East");
+  const [housing, setHousing] = useState("Greek Housing");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (status === "student") {
+      const formData = new FormData(event.target);
+      const firstName = formData.get("firstName");
+      const lastName = formData.get("lastName");
+      const username = formData.get("username");
+      const email = formData.get("email");
+      const password = formData.get("password");
+
+      const form = {
+        fname: firstName,
+        lname: lastName,
+        username,
+        email,
+        password,
+        location,
+        housing,
+      };
+      const encodedForm = JSON.stringify(form);
+      axios
+        .post(Constants.CREATE_STUDENT_API_URL, { encodedForm })
+        .then((response) => {
+          if (response.data) {
+            console.log(response.data);
+            toast.success(
+              "👏 A student account has already been created! Please go back to the sign in page to login with your username and password."
+            );
+          }
+        });
+    }
+  };
 
   return (
     <Container component="main" maxWidth="sm">
@@ -59,7 +97,11 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          noValidate
+          onSubmit={(event) => handleSubmit(event)}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -142,7 +184,10 @@ export default function SignUp() {
               </ButtonGroup>
             </Grid>
             {status === "student" && (
-              <StudentSignUp location={location} setLocation={setLocation} />
+              <StudentSignUp
+                setHousing={setHousing}
+                setLocation={setLocation}
+              />
             )}
             {status === "employee" && <EmployeeSignUp />}
           </Grid>

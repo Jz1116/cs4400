@@ -7,6 +7,7 @@ const site = require("./site");
 const appt = require("./appt");
 const test = require("./test");
 const pool = require("./pool");
+const student = require("./student");
 
 /* GET home page. */
 /** 
@@ -21,4 +22,5 @@ router.use("/site", site);
 router.use("/appt", appt);
 router.use("/test", test);
 router.use("/pool", pool);
+router.use("/student", student);
 module.exports = router;

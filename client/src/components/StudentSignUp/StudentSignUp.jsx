@@ -21,7 +21,7 @@ const locationTypes = [
   },
 ];
 
-export default function StudentSignUp() {
+export default function StudentSignUp(props) {
   return (
     <>
       <Grid item xs={12} sm={6}>
@@ -36,7 +36,11 @@ export default function StudentSignUp() {
           required
         >
           {housingTypes.map((housingType) => (
-            <MenuItem key={housingType.value} value={`${housingType.value}`}>
+            <MenuItem
+              key={housingType.value}
+              value={housingType.value}
+              onClick={() => props.setHousing(housingType.value)}
+            >
               {housingType.label}
             </MenuItem>
           ))}
@@ -54,7 +58,11 @@ export default function StudentSignUp() {
           defaultValue="East"
         >
           {locationTypes.map((locationType) => (
-            <MenuItem key={locationType.value} value={`${locationType.value}`}>
+            <MenuItem
+              key={locationType.value}
+              value={locationType.value}
+              onClick={() => props.setLocation(locationType.value)}
+            >
               {locationType.label}
             </MenuItem>
           ))}
