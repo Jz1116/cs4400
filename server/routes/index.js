@@ -12,7 +12,11 @@ const aggregate = require("./aggregate");
 const filter = require("./filter");
 const testprocessed = require("./testprocessed");
 const viewpool = require("./viewpool");
+<<<<<<< HEAD
 const registeremployee = require("./registeremployee");
+=======
+const registerstudent = require("./registerstudent")
+>>>>>>> ffa446c7727f52fa65c204157db5ee792b2b3157
 
 /* GET home page. */
 /** 
@@ -32,5 +36,9 @@ router.use("/aggregate", aggregate);
 router.use("/filter",filter);
 router.use("/testprocessed", testprocessed);
 router.use("/viewpool", viewpool);
+<<<<<<< HEAD
 router.use("/registeremployee", registeremployee);
+=======
+router.use("/registerstudent", registerstudent);
+>>>>>>> ffa446c7727f52fa65c204157db5ee792b2b3157
 module.exports = router;
