@@ -21,7 +21,7 @@ import AggregateResult from "../components/AggregateResult/AggregateResult";
 import CreateSite from "../components/CreateSite/CreateSite";
 import CreateAppt from "../components/CreateAppt/CreateAppt";
 import DailyResult from "../components/DailyResult/DailyResult";
-import ApptTable from "../components/ApptTable/ApptTable";
+import ViewAppt from "../components/ViewAppt/ViewAppt";
 import ReassignTester from "../components/ReassignTester/ReassignTester";
 import WelcomePage from "../components/WelcomePage/WelcomePage";
 
@@ -146,7 +146,7 @@ export default function Dashboard() {
     ),
     view_appointments: (
       <Paper className={classes.paper}>
-        <ApptTable />
+        <ViewAppt />
       </Paper>
     ),
     reassign_testers: (

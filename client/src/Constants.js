@@ -18,6 +18,7 @@ export const CREATE_STUDENT_API_URL = `${STUDENT_API_URL}/create`;
 export const POOL_RESULT_API_URL = `${POOL_API_URL}/result`;
 export const CREATE_POOL_API_URL = `${POOL_API_URL}/create`;
 export const CREATE_APPT_API_URL = `${APPT_API_URL}/create`;
+export const ALL_APPTS_API_URL = `${APPT_API_URL}/all`;
 export const ALL_TESTS_API_URL = `${TEST_API_URL}/all`;
 export const ALL_SITES_API_URL = `${SITE_API_URL}/all`;
 export const ALL_TESTERS_API_URL = `${TESTER_API_URL}/all`;

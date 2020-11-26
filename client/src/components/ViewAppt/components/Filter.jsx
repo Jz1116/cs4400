@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
@@ -8,8 +8,8 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
-
-const sites = ["CRC", "CoC", "CoB", "All"];
+import axios from "axios";
+import * as Constants from "../../../Constants";
 
 const useStyles = makeStyles((theme) => ({
   containerStart: {
@@ -30,8 +30,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Filter() {
+export default function Filter(props) {
   const classes = useStyles();
+  const [sites, setSites] = useState([]);
+
+  if (sites.length === 0) {
+    axios.get(Constants.ALL_SITES_API_URL).then((response) => {
+      const siteData = response.data;
+      siteData.push("All");
+      setSites(siteData);
+    });
+  }
+
   return (
     <>
       <Grid container spacing={3} className={classes.containerStart}>
@@ -46,7 +56,11 @@ export default function Filter() {
             defaultValue="All"
           >
             {sites.map((site) => (
-              <MenuItem key={site} value={site}>
+              <MenuItem
+                key={site}
+                value={site}
+                onClick={() => props.setSiteName(site)}
+              >
                 {site}
               </MenuItem>
             ))}
@@ -105,7 +119,11 @@ export default function Filter() {
           <FormLabel component="legend" className={classes.containerMid}>
             Availability
           </FormLabel>
-          <RadioGroup className={classes.group} defaultValue="Show all">
+          <RadioGroup
+            className={classes.group}
+            defaultValue="Show all"
+            onChange={(event) => props.setAvailableStatus(event.target.value)}
+          >
             <FormControlLabel
               value="Show all"
               control={<Radio />}

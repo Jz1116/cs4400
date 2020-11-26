@@ -19,7 +19,7 @@ import { Redirect } from "react-router-dom";
 import TesterListItems from "../components/ListItems/TesterListItems/TesterListItems";
 import AggregateResult from "../components/AggregateResult/AggregateResult";
 import CreateAppt from "../components/CreateAppt/CreateAppt";
-import ApptTable from "../components/ApptTable/ApptTable";
+import ViewAppt from "../components/ViewAppt/ViewAppt";
 import DailyResult from "../components/DailyResult/DailyResult";
 import TestingSiteChange from "../components/TestingSiteChange/TestingSiteChange";
 import WelcomePage from "../components/WelcomePage/WelcomePage";
@@ -139,7 +139,7 @@ export default function Dashboard() {
     ),
     view_appointments: (
       <Paper className={classes.paper}>
-        <ApptTable />
+        <ViewAppt />
       </Paper>
     ),
     change_site: (

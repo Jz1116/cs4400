@@ -25,7 +25,7 @@ import ViewPools from "../components/ViewPools/ViewPools";
 import ProcessPool from "../components/ProcessPool/ProcessPool";
 import TestingSiteChange from "../components/TestingSiteChange/TestingSiteChange";
 import CreateAppt from "../components/CreateAppt/CreateAppt";
-import ApptTable from "../components/ApptTable/ApptTable";
+import ViewAppt from "../components/ViewAppt/ViewAppt";
 import WelcomePage from "../components/WelcomePage/WelcomePage";
 
 const drawerWidth = 240;
@@ -164,7 +164,7 @@ export default function Dashboard() {
     ),
     view_appointments: (
       <Paper className={classes.paper}>
-        <ApptTable />
+        <ViewAppt />
       </Paper>
     ),
     create_an_appointment: (
