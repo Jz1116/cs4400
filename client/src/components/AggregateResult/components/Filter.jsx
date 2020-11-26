@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
+import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
+import * as Constants from "../../../Constants";
 
 const locationTypes = [
   {
@@ -30,16 +32,6 @@ const housingTypes = [
   },
 ];
 
-const siteTypes = [
-  { value: "CRC", label: "CRC" },
-  { value: "CoC", label: "CoC" },
-  { value: "CoB", label: "CoB" },
-  {
-    value: "All",
-    label: "All",
-  },
-];
-
 const useStyles = makeStyles((theme) => ({
   containerStart: {
     paddingTop: theme.spacing(4),
@@ -52,8 +44,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Filter() {
+export default function Filter(props) {
   const classes = useStyles();
+  const [sites, setSites] = useState([]);
+
+  if (sites.length === 0) {
+    axios.get(Constants.ALL_SITES_API_URL).then((response) => {
+      const siteData = response.data;
+      siteData.push("All");
+      setSites(siteData);
+    });
+  }
+
   return (
     <>
       <Grid container spacing={3} className={classes.containerStart}>
@@ -71,6 +73,7 @@ export default function Filter() {
               <MenuItem
                 key={locationType.value}
                 value={`${locationType.value}`}
+                onClick={() => props.setLocation(locationType.value)}
               >
                 {locationType.label}
               </MenuItem>
@@ -88,7 +91,11 @@ export default function Filter() {
             defaultValue="All"
           >
             {housingTypes.map((housingType) => (
-              <MenuItem key={housingType.value} value={`${housingType.value}`}>
+              <MenuItem
+                key={housingType.value}
+                value={`${housingType.value}`}
+                onClick={() => props.setHousing(housingType.value)}
+              >
                 {housingType.label}
               </MenuItem>
             ))}
@@ -104,9 +111,13 @@ export default function Filter() {
             variant="outlined"
             defaultValue="All"
           >
-            {siteTypes.map((siteType) => (
-              <MenuItem key={siteType.value} value={`${siteType.value}`}>
-                {siteType.label}
+            {sites.map((site) => (
+              <MenuItem
+                key={site}
+                value={site}
+                onClick={() => props.setSite(site)}
+              >
+                {site}
               </MenuItem>
             ))}
           </TextField>

@@ -14,4 +14,5 @@ export const ALL_TESTS_API_URL = `${TEST_API_URL}/all`;
 export const ALL_SITES_API_URL = `${SITE_API_URL}/all`;
 export const ALL_TESTERS_API_URL = `${TESTER_API_URL}/all`;
 export const DAILY_RESULT_API_URL = `${RESULT_API_URL}/daily`;
+export const AGGREGATE_RESULT_API_URL = `${RESULT_API_URL}/aggregate`;
 export const CREATE_SITE_API_URL = `${SITE_API_URL}/create`;
