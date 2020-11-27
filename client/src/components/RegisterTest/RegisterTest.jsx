@@ -93,6 +93,51 @@ export default function RegisterTest(props) {
       });
   };
 
+  const handleChange = (event, date, time, name) => {
+    const selectedAppt = appts.find(
+      (appt) =>
+        appt.date === date && appt.time === time && appt.siteName === name
+    );
+    selectedAppt.checked = event.target.checked;
+    setAppts(appts);
+  };
+
+  const handleSignUp = () => {
+    let count = 0;
+
+    appts.forEach((appt) => {
+      if (appt.checked) {
+        count += 1;
+      }
+    });
+
+    if (count > 1) {
+      toast.warn("😢 Please sign up only one appointment.");
+    } else if (count === 0) {
+      toast.warn("😢 Please sign up one appointment.");
+    } else if (count === 1) {
+      const appt = appts.find((appointment) => appointment.checked === true);
+      const form = {
+        username: props.username,
+        siteName: appt.siteName,
+        date: appt.date,
+        time: appt.time,
+      };
+
+      const encodedForm = JSON.stringify(form);
+
+      axios
+        .post(Constants.STUDENT_REGISTER_APPT_API_URL, { encodedForm })
+        .then((response) => {
+          if (response.data.success) {
+            toast.success(
+              "😉 You have signed up for an appointment successfully!"
+            );
+          }
+        });
+    }
+  };
+
   return (
     <>
       <Title>Sign up for a Test</Title>
@@ -115,7 +160,11 @@ export default function RegisterTest(props) {
                 <TableCell>{row.address}</TableCell>
                 <TableCell>{row.siteName}</TableCell>
                 <TableCell>
-                  <Checkbox checked={row.checked} />
+                  <Checkbox
+                    onChange={(event) =>
+                      // eslint-disable-next-line prettier/prettier
+                      handleChange(event, row.date, row.time, row.siteName)}
+                  />
                 </TableCell>
               </TableRow>
             ))}
@@ -167,6 +216,7 @@ export default function RegisterTest(props) {
             color="primary"
             fullWidth
             className={classes.button}
+            onClick={() => handleSignUp()}
           >
             Sign Up
           </Button>
