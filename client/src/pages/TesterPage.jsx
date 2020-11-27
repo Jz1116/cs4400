@@ -105,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+export default function Dashboard(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const [barStatus, setBarStatus] = React.useState("home");
@@ -144,7 +144,7 @@ export default function Dashboard() {
     ),
     change_site: (
       <Paper className={classes.paper}>
-        <TestingSiteChange />
+        <TestingSiteChange username={props.location.state.name} />
       </Paper>
     ),
     home: (
