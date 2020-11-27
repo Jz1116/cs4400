@@ -1,5 +1,6 @@
 const express = require("express");
 const moment = require("moment");
+const generateUniqueId = require("generate-unique-id");
 const db = require("../mysqldb");
 
 const router = express.Router();
@@ -198,6 +199,27 @@ router.post("/appts", (req, res) => {
     });
 
     res.status(200).json(appts);
+  });
+});
+
+router.post("/register/appt", (req, res) => {
+  const { encodedForm } = req.body;
+  const form = JSON.parse(encodedForm);
+  const { username, siteName, date, time } = form;
+  const testId = generateUniqueId({
+    length: 6,
+    useLetters: true,
+  });
+
+  const formalDate = moment(date, "M/D/YY").format("YYYY-MM-DD");
+
+  const sql = `CALL test_sign_up('${username}', '${siteName}', '${formalDate}', '${time}', '${testId}')`;
+
+  db.query(sql, true, (error) => {
+    if (error) {
+      console.error(error.message);
+    }
+    res.status(200).json({ success: true });
   });
 });
 
