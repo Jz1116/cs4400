@@ -19,7 +19,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import StudentListItems from "../components/ListItems/StudentListItems/StudentListItems";
 import DailyResult from "../components/DailyResult/DailyResult";
 import AggregateResult from "../components/AggregateResult/AggregateResult";
-import MyResult from "../components/MyResult/MyResult";
+import StudentResult from "../components/StudentResult/StudentResult";
 import RegisterTest from "../components/RegisterTest/RegisterTest";
 import WelcomePage from "../components/WelcomePage/WelcomePage";
 
@@ -134,7 +134,7 @@ export default function Dashboard(props) {
     ),
     my_result: (
       <Paper className={classes.paper}>
-        <MyResult username={props.location.state.name} />
+        <StudentResult username={props.location.state.name} />
       </Paper>
     ),
     sign_up_test: (
