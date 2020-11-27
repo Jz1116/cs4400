@@ -6,8 +6,6 @@ import Container from "@material-ui/core/Container";
 import SelectPool from "./components/SelectPool";
 import StartProcess from "./components/StartProcess";
 
-const pools = [11222, 22333, 33444];
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(3),
@@ -32,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ProcessPool() {
   const classes = useStyles();
   const [poolSelected, setSelected] = useState(false);
+  const [poolId, setPoolId] = useState("");
 
   return (
     <Container component="main" maxWidth="sm">
@@ -41,9 +40,11 @@ export default function ProcessPool() {
           Process Pool
         </Typography>
         {poolSelected === false && (
-          <SelectPool pools={pools} setSelected={setSelected} />
+          <SelectPool setSelected={setSelected} setPoolId={setPoolId} />
         )}
-        {poolSelected === true && <StartProcess />}
+        {poolSelected === true && (
+          <StartProcess setSelected={setSelected} poolId={poolId} />
+        )}
       </div>
     </Container>
   );

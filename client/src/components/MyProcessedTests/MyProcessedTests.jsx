@@ -13,17 +13,6 @@ import Title from "./components/Title";
 import Filter from "./components/Filter";
 import * as Constants from "../../Constants";
 
-function createData(id, poolId, dateTested, dateProcessed, result) {
-  return { id, poolId, dateTested, dateProcessed, result };
-}
-
-const rows = [
-  createData(1, 22332, "8/17/20", "8/29/20", "Negative"),
-  createData(2, 22332, "8/24/20", "8/29/20", "Positive"),
-  createData(3, 22332, "8/28/20", "8/29/20", "Positive"),
-  createData(4, 44554, "9/1/20", "9/1/20", "Positive"),
-];
-
 const useStyles = makeStyles((theme) => ({
   containerEnd: {
     paddingTop: theme.spacing(2),
@@ -39,6 +28,9 @@ export default function MyProcessedTests(props) {
   const [testStatus, setTestStatus] = useState("All");
   const [tests, setTests] = useState([]);
   const [status, setStatus] = useState(false);
+  const [detailMode, setDetailMode] = useState(false);
+  const [poolResult, setPoolResult] = useState([]);
+  const [poolTests, setPoolTests] = useState([]);
 
   const initializeTests = () => {
     const form = {
@@ -86,69 +78,169 @@ export default function MyProcessedTests(props) {
       });
   };
 
+  const handlePoolDetail = (poolId) => {
+    axios.get(`${Constants.POOL_DATA_API_URL}/${poolId}`).then((response) => {
+      setDetailMode(true);
+      setPoolResult(response.data);
+      if (response.data.length === 0) {
+        toast.warn(
+          "😥 The pool result is not available. Please come back later."
+        );
+        setPoolTests([]);
+      } else {
+        axios.get(`${Constants.POOL_TESTS_API_URL}/${poolId}`).then((res) => {
+          setPoolTests(res.data);
+        });
+      }
+    });
+  };
+
   return (
     <>
-      <Title>Lab Tech Tests Processed</Title>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Test ID#</TableCell>
-            <TableCell>Pool ID</TableCell>
-            <TableCell>Date Tested</TableCell>
-            <TableCell>Date Processed</TableCell>
-            <TableCell>Result</TableCell>
-          </TableRow>
-        </TableHead>
-        {tests.length !== 0 && (
-          <TableBody>
-            {tests.map((row) => (
-              <TableRow key={row.testId}>
-                <TableCell>{row.testId}</TableCell>
-                <TableCell>{row.poolId}</TableCell>
-                <TableCell>{row.testDate}</TableCell>
-                <TableCell>{row.processDate}</TableCell>
-                <TableCell>{row.testStatus}</TableCell>
+      {detailMode === false ? (
+        <>
+          <Title>Lab Tech Tests Processed</Title>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Test ID#</TableCell>
+                <TableCell>Pool ID</TableCell>
+                <TableCell>Date Tested</TableCell>
+                <TableCell>Date Processed</TableCell>
+                <TableCell>Result</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        )}
-      </Table>
-      <form
-        className={classes.form}
-        noValidate
-        onSubmit={(event) => handleSubmit(event)}
-      >
-        <Filter setTestStatus={setTestStatus} />
-        <Grid
-          container
-          spacing={3}
-          justify="center"
-          className={classes.containerEnd}
-        >
-          <Grid item sm={2}>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              fullWidth
+            </TableHead>
+            {tests.length !== 0 && (
+              <TableBody>
+                {tests.map((row) => (
+                  <TableRow key={row.testId}>
+                    <TableCell>{row.testId}</TableCell>
+                    <TableCell>
+                      <Button
+                        onClick={() => {
+                          handlePoolDetail(row.poolId);
+                        }}
+                      >
+                        {row.poolId}
+                      </Button>
+                    </TableCell>
+                    <TableCell>{row.testDate}</TableCell>
+                    <TableCell>{row.processDate}</TableCell>
+                    <TableCell>{row.testStatus}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            )}
+          </Table>
+          <form
+            className={classes.form}
+            noValidate
+            onSubmit={(event) => handleSubmit(event)}
+          >
+            <Filter setTestStatus={setTestStatus} />
+            <Grid
+              container
+              spacing={3}
+              justify="center"
+              className={classes.containerEnd}
             >
-              Filter
-            </Button>
+              <Grid item sm={2}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  fullWidth
+                >
+                  Filter
+                </Button>
+              </Grid>
+              <Grid item sm={2}>
+                <Button
+                  variant="contained"
+                  color="default"
+                  className={classes.button}
+                  fullWidth
+                  onClick={() => initializeTests()}
+                >
+                  Reset
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </>
+      ) : (
+        <>
+          <Title>Explore Pool Result</Title>
+          {poolResult.length !== 0 && (
+            <>
+              <Title>Pool Metadata</Title>
+              <Table>
+                <TableHead>
+                  <TableRow key={poolResult[0].poolId}>
+                    <TableCell>Pool ID#</TableCell>
+                    <TableCell>{poolResult[0].poolId}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow key={poolResult[0].dateProcessed}>
+                    <TableCell>Date Processed</TableCell>
+                    <TableCell>{poolResult[0].dateProcessed}</TableCell>
+                  </TableRow>
+                  <TableRow key={poolResult[0].processedBy}>
+                    <TableCell>Processed By</TableCell>
+                    <TableCell>{poolResult[0].processedBy}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </>
+          )}
+          <br />
+          {poolTests.length !== 0 && (
+            <>
+              <Title>Tests In Pool</Title>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Test ID#</TableCell>
+                    <TableCell>Date Tested</TableCell>
+                    <TableCell>Testing Site</TableCell>
+                    <TableCell>Test Result</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {poolTests.map((row) => (
+                    <TableRow key={row.testId}>
+                      <TableCell>{row.testId}</TableCell>
+                      <TableCell>{row.dateTested}</TableCell>
+                      <TableCell>{row.siteName}</TableCell>
+                      <TableCell>{row.testResult}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </>
+          )}
+          <Grid
+            container
+            spacing={3}
+            justify="center"
+            className={classes.containerEnd}
+          >
+            <Grid item sm={2}>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                onClick={() => setDetailMode(false)}
+                fullWidth
+              >
+                Back
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item sm={2}>
-            <Button
-              variant="contained"
-              color="default"
-              className={classes.button}
-              fullWidth
-              onClick={() => initializeTests()}
-            >
-              Reset
-            </Button>
-          </Grid>
-        </Grid>
-      </form>
+        </>
+      )}
     </>
   );
 }

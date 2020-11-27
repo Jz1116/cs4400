@@ -28,27 +28,20 @@ const rows = [
 ];
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(3),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
   form: {
     width: "100%",
     marginTop: theme.spacing(3),
   },
   submit: {
-    margin: theme.spacing(3, 0, 6),
+    margin: theme.spacing(3, 0, 2),
+    textTransform: "none",
+  },
+  buttonLowerText: {
     textTransform: "none",
   },
 }));
 
-export default function SelectPool() {
+export default function SelectPool(props) {
   const [poolStatus, setPoolStatus] = useState("");
   const classes = useStyles();
 
@@ -160,6 +153,15 @@ export default function SelectPool() {
         className={classes.submit}
       >
         Process Pool
+      </Button>
+      <Button
+        variant="outlined"
+        color="default"
+        onClick={() => props.setSelected(false)}
+        className={classes.buttonLowerText}
+        fullWidth
+      >
+        Back
       </Button>
     </form>
   );

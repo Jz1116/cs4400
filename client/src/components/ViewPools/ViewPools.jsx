@@ -28,6 +28,9 @@ export default function ViewPools() {
   const [poolStatus, setPoolStatus] = useState("All");
   const [result, setResult] = useState("");
   const [status, setStatus] = useState(false);
+  const [detailMode, setDetailMode] = useState(false);
+  const [poolResult, setPoolResult] = useState([]);
+  const [poolTests, setPoolTests] = useState([]);
 
   const initializePool = () => {
     const form = {
@@ -76,69 +79,167 @@ export default function ViewPools() {
       });
   };
 
+  const handlePoolDetail = (poolId) => {
+    axios.get(`${Constants.POOL_DATA_API_URL}/${poolId}`).then((response) => {
+      setDetailMode(true);
+      setPoolResult(response.data);
+      if (response.data.length === 0) {
+        toast.warn(
+          "😥 The pool result is not available. Please come back later."
+        );
+        setPoolTests([]);
+      } else {
+        axios.get(`${Constants.POOL_TESTS_API_URL}/${poolId}`).then((res) => {
+          setPoolTests(res.data);
+        });
+      }
+    });
+  };
+
   return (
     <>
-      <Title>View Pools</Title>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Pool ID</TableCell>
-            <TableCell>Test Ids</TableCell>
-            <TableCell>Date Processed</TableCell>
-            <TableCell>Processed By</TableCell>
-            <TableCell>Pool Status</TableCell>
-          </TableRow>
-        </TableHead>
-        {result.length !== 0 && (
-          <TableBody>
-            {result.map((row) => (
-              <TableRow key={row.poolId}>
-                <TableCell>{row.poolId}</TableCell>
-                <TableCell>{row.testIds}</TableCell>
-                <TableCell>{row.dateProcessed}</TableCell>
-                <TableCell>{row.processedBy}</TableCell>
-                <TableCell>{row.poolStatus}</TableCell>
+      {detailMode === false ? (
+        <>
+          <Title>View Pools</Title>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Pool ID</TableCell>
+                <TableCell>Test Ids</TableCell>
+                <TableCell>Date Processed</TableCell>
+                <TableCell>Processed By</TableCell>
+                <TableCell>Pool Status</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        )}
-      </Table>
-      <form
-        className={classes.form}
-        noValidate
-        onSubmit={(event) => handleSubmit(event)}
-      >
-        <Filter setPoolStatus={setPoolStatus} />
-        <Grid
-          container
-          spacing={3}
-          justify="center"
-          className={classes.containerEnd}
-        >
-          <Grid item sm={2}>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              fullWidth
+            </TableHead>
+            {result.length !== 0 && (
+              <TableBody>
+                {result.map((row) => (
+                  <TableRow key={row.poolId}>
+                    <Button
+                      onClick={() => {
+                        handlePoolDetail(row.poolId);
+                      }}
+                    >
+                      {row.poolId}
+                    </Button>
+                    <TableCell>{row.testIds}</TableCell>
+                    <TableCell>{row.dateProcessed}</TableCell>
+                    <TableCell>{row.processedBy}</TableCell>
+                    <TableCell>{row.poolStatus}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            )}
+          </Table>
+          <form
+            className={classes.form}
+            noValidate
+            onSubmit={(event) => handleSubmit(event)}
+          >
+            <Filter setPoolStatus={setPoolStatus} />
+            <Grid
+              container
+              spacing={3}
+              justify="center"
+              className={classes.containerEnd}
             >
-              Filter
-            </Button>
+              <Grid item sm={2}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  fullWidth
+                >
+                  Filter
+                </Button>
+              </Grid>
+              <Grid item sm={2}>
+                <Button
+                  variant="contained"
+                  color="default"
+                  className={classes.button}
+                  fullWidth
+                  onClick={() => initializePool()}
+                >
+                  Reset
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </>
+      ) : (
+        <>
+          <Title>Explore Pool Result</Title>
+          {poolResult.length !== 0 && (
+            <>
+              <Title>Pool Metadata</Title>
+              <Table>
+                <TableHead>
+                  <TableRow key={poolResult[0].poolId}>
+                    <TableCell>Pool ID#</TableCell>
+                    <TableCell>{poolResult[0].poolId}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow key={poolResult[0].dateProcessed}>
+                    <TableCell>Date Processed</TableCell>
+                    <TableCell>{poolResult[0].dateProcessed}</TableCell>
+                  </TableRow>
+                  <TableRow key={poolResult[0].processedBy}>
+                    <TableCell>Processed By</TableCell>
+                    <TableCell>{poolResult[0].processedBy}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </>
+          )}
+          <br />
+          {poolTests.length !== 0 && (
+            <>
+              <Title>Tests In Pool</Title>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Test ID#</TableCell>
+                    <TableCell>Date Tested</TableCell>
+                    <TableCell>Testing Site</TableCell>
+                    <TableCell>Test Result</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {poolTests.map((row) => (
+                    <TableRow key={row.testId}>
+                      <TableCell>{row.testId}</TableCell>
+                      <TableCell>{row.dateTested}</TableCell>
+                      <TableCell>{row.siteName}</TableCell>
+                      <TableCell>{row.testResult}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </>
+          )}
+          <Grid
+            container
+            spacing={3}
+            justify="center"
+            className={classes.containerEnd}
+          >
+            <Grid item sm={2}>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                onClick={() => setDetailMode(false)}
+                fullWidth
+              >
+                Back
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item sm={2}>
-            <Button
-              variant="contained"
-              color="default"
-              className={classes.button}
-              fullWidth
-              onClick={() => initializePool()}
-            >
-              Reset
-            </Button>
-          </Grid>
-        </Grid>
-      </form>
+        </>
+      )}
     </>
   );
 }

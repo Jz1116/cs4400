@@ -4,6 +4,21 @@ const db = require("../mysqldb");
 
 const router = express.Router();
 
+router.get("/all/pending", (req, res) => {
+  const getPendingPools = `select pool_id from pool where pool_status = 'pending'`;
+
+  db.query(getPendingPools, true, (error, result) => {
+    if (error) {
+      console.error(error.message);
+    }
+    const poolIds = [];
+    result.forEach((row) => {
+      poolIds.push(row.pool_id);
+    });
+    res.status(200).json(poolIds);
+  });
+});
+
 router.post("/create", (req, res) => {
   const { encodedForm } = req.body;
   const form = JSON.parse(encodedForm);
@@ -90,6 +105,74 @@ router.post("/result", (req, res) => {
     });
 
     res.status(200).json(pools);
+  });
+});
+
+router.get("/data/:poolId", (req, res) => {
+  const { poolId } = req.params;
+
+  const poolMetadataResult = `CALL pool_metadata('${poolId}')`;
+
+  db.query(poolMetadataResult, true, (error) => {
+    if (error) {
+      console.error(error.message);
+    }
+  });
+
+  const displayResult = "select * from pool_metadata_result";
+
+  db.query(displayResult, true, (error, result) => {
+    if (error) {
+      console.error(error.message);
+    }
+
+    const poolMetadata = result.map((row) => {
+      const formalDate = moment.utc(row.date_processed).format("M/D/YY");
+
+      return {
+        poolId: row.pool_id,
+        dateProcessed: formalDate,
+        pooledResult: row.pooled_result,
+        processedBy: row.processed_by,
+      };
+    });
+
+    res.status(200).json(poolMetadata);
+  });
+});
+
+router.get("/tests/:poolId", (req, res) => {
+  const { poolId } = req.params;
+
+  const testsInPoolResult = `CALL tests_in_pool('${poolId}')`;
+  db.query(testsInPoolResult, true, (error) => {
+    if (error) {
+      console.error(error.message);
+    }
+  });
+
+  const displayTests = "select * from tests_in_pool_result";
+  db.query(displayTests, true, (error, result) => {
+    if (error) {
+      console.error(error.message);
+    }
+
+    result.sort((a, b) => {
+      return new Date(a.date_tested) - new Date(b.date_tested);
+    });
+
+    const testsInPool = result.map((row) => {
+      const formalDate = moment.utc(row.date_tested).format("M/D/YY");
+
+      return {
+        testId: row.test_id,
+        dateTested: formalDate,
+        siteName: row.testing_site,
+        testResult: row.test_result,
+      };
+    });
+
+    res.status(200).json(testsInPool);
   });
 });
 

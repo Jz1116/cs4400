@@ -96,7 +96,6 @@ router.post("/result", (req, res) => {
 
 router.get("/result/:testId", (req, res) => {
   const { testId } = req.params;
-
   const exploreResult = `CALL explore_results(${testId})`;
 
   db.query(exploreResult, true, (error) => {
@@ -129,7 +128,7 @@ router.get("/result/:testId", (req, res) => {
         processedBy: row.processed_by,
       };
     });
-    console.log(testResult);
+
     res.status(200).json(testResult);
   });
 });
