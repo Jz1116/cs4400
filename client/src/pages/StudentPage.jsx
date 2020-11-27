@@ -139,7 +139,7 @@ export default function Dashboard(props) {
     ),
     sign_up_test: (
       <Paper className={classes.paper}>
-        <RegisterTest />
+        <RegisterTest username={props.location.state.name} />
       </Paper>
     ),
     home: (

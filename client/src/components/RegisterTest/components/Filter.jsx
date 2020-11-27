@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Filter() {
+export default function Filter(props) {
   const classes = useStyles();
   return (
     <>
@@ -40,9 +40,13 @@ export default function Filter() {
             variant="outlined"
             defaultValue="All"
           >
-            {siteOptions.map((siteOption) => (
-              <MenuItem key={siteOption} value={siteOption}>
-                {siteOption}
+            {props.sites.map((site) => (
+              <MenuItem
+                key={site}
+                value={site}
+                onClick={() => props.setSiteName(site)}
+              >
+                {site}
               </MenuItem>
             ))}
           </TextField>

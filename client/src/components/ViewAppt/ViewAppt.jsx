@@ -13,17 +13,6 @@ import Title from "./components/Title";
 import Filter from "./components/Filter";
 import * as Constants from "../../Constants";
 
-function createData(id, date, time, site, location, user) {
-  return { id, date, time, site, location, user };
-}
-
-const rows = [
-  createData("p0", "8/17/20", "10:00 am", "Bobby Dodd", "East", "student1"),
-  createData("p1", "8/17/20", "11:00 am", "Bobby Dodd", "East", ""),
-  createData("p2", "8/17/20", "12:00 pm", "ECHO", "East", "student2"),
-  createData("p3", "8/17/20", "1:00 pm", "North Pole", "West", ""),
-];
-
 const useStyles = makeStyles((theme) => ({
   containerEnd: {
     paddingTop: theme.spacing(2),

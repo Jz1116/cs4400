@@ -19,6 +19,19 @@ router.post("/create", (req, res) => {
   });
 });
 
+router.get("/:username/location", (req, res) => {
+  const { username } = req.params;
+
+  const getLocation = `select location from student where student_username = '${username}'`;
+  db.query(getLocation, true, (error, result) => {
+    if (error) {
+      console.error(error.message);
+    }
+
+    res.status(200).json(result[0].location);
+  });
+});
+
 router.post("/result", (req, res) => {
   const { encodedForm } = req.body;
   const form = JSON.parse(encodedForm);
@@ -117,6 +130,74 @@ router.get("/result/:testId", (req, res) => {
     });
     console.log(testResult);
     res.status(200).json(testResult);
+  });
+});
+
+router.post("/appts", (req, res) => {
+  const { encodedForm } = req.body;
+  const form = JSON.parse(encodedForm);
+  let { siteName, startDate, endDate, startTime, endTime } = form;
+  const { username } = form;
+
+  const str1 = "'";
+
+  if (startTime !== null) {
+    startTime = str1.concat(startTime);
+    startTime = startTime.concat(str1);
+  }
+
+  if (endTime !== null) {
+    endTime = str1.concat(endTime);
+    endTime = endTime.concat(str1);
+  }
+
+  if (siteName !== null) {
+    siteName = str1.concat(siteName);
+    siteName = siteName.concat(str1);
+  }
+
+  if (startDate !== null) {
+    startDate = str1.concat(startDate);
+    startDate = startDate.concat(str1);
+  }
+
+  if (endDate !== null) {
+    endDate = str1.concat(endDate);
+    endDate = endDate.concat(str1);
+  }
+
+  const testSignUp = `CALL test_sign_up_filter('${username}', ${siteName}, ${startDate}, ${endDate}, ${startTime}, ${endTime})`;
+
+  db.query(testSignUp, true, (error) => {
+    if (error) {
+      console.error(error.message);
+    }
+  });
+
+  const displayAppts = "select * from test_sign_up_filter_result";
+
+  db.query(displayAppts, true, (error, result) => {
+    if (error) {
+      console.error(error.message);
+    }
+
+    result.sort((a, b) => {
+      return new Date(a.appt_date) - new Date(b.appt_date);
+    });
+
+    const appts = result.map((row) => {
+      const formalDate = moment.utc(row.appt_date).format("M/D/YY");
+
+      return {
+        date: formalDate,
+        time: row.appt_time,
+        address: row.street,
+        siteName: row.site_name,
+        checked: false,
+      };
+    });
+
+    res.status(200).json(appts);
   });
 });
 

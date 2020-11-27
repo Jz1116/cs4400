@@ -15,6 +15,7 @@ export const LABTECH_TESTS_API_URL = `${LABTECH_API_URL}/tests`;
 export const CREATE_EMPLOYEE_API_URL = `${EMPLOYEE_API_URL}/create`;
 export const STUDENT_RESULT_API_URL = `${STUDENT_API_URL}/result`;
 export const CREATE_STUDENT_API_URL = `${STUDENT_API_URL}/create`;
+export const STUDENT_APPTS_API_URL = `${STUDENT_API_URL}/appts`;
 export const POOL_RESULT_API_URL = `${POOL_API_URL}/result`;
 export const CREATE_POOL_API_URL = `${POOL_API_URL}/create`;
 export const CREATE_APPT_API_URL = `${APPT_API_URL}/create`;
