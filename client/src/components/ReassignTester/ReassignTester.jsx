@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -9,20 +9,11 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import axios from "axios";
+import { toast } from "react-toastify";
+import _ from "lodash";
 import Title from "./components/Title";
-
-function createData(id, username, name, phoneNumber, sites) {
-  return { id, username, name, phoneNumber, sites };
-}
-
-const rows = [
-  createData(0, "dmcstuffins7", "Doc McStuffins", "1234567890", ["CoC", "CoB"]),
-  createData(1, "jdoe381", "Jane Doe", "0987654321", []),
-  createData(2, "akarev16", "Alex Karev", "1236547890", ["CRC", "CoC"]),
-  createData(3, "sstranger11", "Stephen Strange", "3216540987", ["CoB"]),
-];
-
-const sites = ["CoC", "CoB", "CRC"];
+import * as Constants from "../../Constants";
 
 const useStyles = makeStyles((theme) => ({
   containerEnd: {
@@ -36,6 +27,70 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ReassignTester() {
   const classes = useStyles();
+  const [status, setStatus] = useState(false);
+  const [testersInfo, setTestersInfo] = useState([]);
+  const [updatedTestersInfo, setUpdatedTestersInfo] = useState([]);
+  const [sites, setSites] = useState([]);
+
+  if (status === false) {
+    axios.get(Constants.VIEW_TESTERS_API_URL).then((response) => {
+      setTestersInfo(response.data);
+      // deep copy
+      setUpdatedTestersInfo(_.cloneDeep(response.data));
+    });
+    axios.get(Constants.ALL_SITES_API_URL).then((response) => {
+      setSites(response.data);
+    });
+    setStatus(true);
+  }
+
+  const handleSites = (username, assignedSites) => {
+    const selectedTesterInfo = updatedTestersInfo.find(
+      (testerInfo) => testerInfo.username === username
+    );
+    selectedTesterInfo.assignedSites = assignedSites;
+    setUpdatedTestersInfo(updatedTestersInfo);
+  };
+
+  const handleUpdate = () => {
+    testersInfo.forEach((testerInfo, idx) => {
+      const { assignedSites } = testerInfo;
+      const updatedSites = updatedTestersInfo[idx].assignedSites;
+      const originalSet = new Set(assignedSites);
+      const newSet = new Set(updatedSites);
+
+      const addedSites = [];
+      const deletedSites = [];
+
+      assignedSites.forEach((site) => {
+        if (!newSet.has(site)) {
+          deletedSites.push(site);
+        }
+      });
+
+      updatedSites.forEach((site) => {
+        if (!originalSet.has(site)) {
+          addedSites.push(site);
+        }
+      });
+
+      addedSites.forEach((site) => {
+        const form = { username: testerInfo.username, siteName: site };
+        const encodedForm = JSON.stringify(form);
+        axios.post(Constants.ASSIGN_TESTER_API_URL, { encodedForm });
+      });
+
+      deletedSites.forEach((site) => {
+        const form = { username: testerInfo.username, siteName: site };
+        const encodedForm = JSON.stringify(form);
+        axios.post(Constants.UNASSIGN_TESTER_API_URL, { encodedForm });
+      });
+    });
+
+    setTestersInfo(_.cloneDeep(updatedTestersInfo));
+    toast.success("😏 The assigned sites are updated!");
+  };
+
   return (
     <>
       <Title>Reassign Tester</Title>
@@ -48,27 +103,31 @@ export default function ReassignTester() {
             <TableCell>Assigned Sites</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.username}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.phoneNumber}</TableCell>
-              <TableCell>
-                <Autocomplete
-                  multiple
-                  id="sites"
-                  options={sites}
-                  getOptionLabel={(option) => option}
-                  defaultValue={row.sites}
-                  renderInput={(params) => (
-                    <TextField {...params} variant="standard" />
-                  )}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
+        {status && (
+          <TableBody>
+            {updatedTestersInfo.map((row) => (
+              <TableRow key={row.username}>
+                <TableCell>{row.username}</TableCell>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.phoneNum}</TableCell>
+                <TableCell>
+                  <Autocomplete
+                    multiple
+                    options={sites}
+                    onChange={(event, value) =>
+                      // eslint-disable-next-line prettier/prettier
+                      handleSites(row.username, value)}
+                    getOptionLabel={(option) => option}
+                    defaultValue={row.assignedSites}
+                    renderInput={(params) => (
+                      <TextField {...params} variant="standard" />
+                    )}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        )}
       </Table>
       <Grid
         container
@@ -82,6 +141,7 @@ export default function ReassignTester() {
             color="primary"
             className={classes.button}
             fullWidth
+            onClick={() => handleUpdate()}
           >
             Update
           </Button>

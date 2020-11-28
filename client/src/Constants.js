@@ -30,6 +30,7 @@ export const ALL_TESTS_API_URL = `${TEST_API_URL}/all`;
 export const ALL_POOLS_API_URL = `${POOL_API_URL}/all`;
 export const ALL_SITES_API_URL = `${SITE_API_URL}/all`;
 export const ALL_TESTERS_API_URL = `${TESTER_API_URL}/all`;
+export const VIEW_TESTERS_API_URL = `${TESTER_API_URL}/view`;
 export const ALL_PENDING_POOLS_API_URL = `${ALL_POOLS_API_URL}/pending`;
 export const ASSIGN_TESTER_API_URL = `${TESTER_API_URL}/assign`;
 export const UNASSIGN_TESTER_API_URL = `${TESTER_API_URL}/unassign`;
