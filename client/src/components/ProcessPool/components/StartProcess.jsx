@@ -11,20 +11,23 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
+import axios from "axios";
+import { toast } from "react-toastify";
+import * as Constants from "../../../Constants";
 
-const moment = require("moment");
-
-const statusOptions = ["Positive", "Negative", "Pending"];
-
-function createData(id, dateTested, result) {
-  return [id, dateTested, result];
-}
-
-const rows = [
-  createData(1, "8/17/20", "Pending"),
-  createData(2, "8/24/20", "Pending"),
-  createData(3, "8/28/20", "Pending"),
-  createData(4, "9/1/20", "Pending"),
+const statusOptions = [
+  {
+    value: "positive",
+    label: "Positive",
+  },
+  {
+    value: "negative",
+    label: "Negative",
+  },
+  {
+    value: "pending",
+    label: "Pending",
+  },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -42,53 +45,122 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SelectPool(props) {
-  const [poolStatus, setPoolStatus] = useState("");
   const classes = useStyles();
+  const [poolStatus, setPoolStatus] = useState("");
+  const [tests, setTests] = useState([]);
+  const [status, setStatus] = useState(false);
+
+  if (status === false) {
+    axios.get(`${Constants.TEST_API_URL}/${props.poolId}`).then((response) => {
+      setTests(response.data);
+      setStatus(true);
+    });
+  }
 
   const handlePoolStatus = (status) => {
     setPoolStatus(status);
 
-    if (status === "Positive") {
-      rows.forEach((row, idx) => {
-        rows[idx][2] = "Pending";
+    if (status === "negative") {
+      const updatedTests = tests.map((test) => {
+        return {
+          testId: test.testId,
+          dateTested: test.dateTested,
+          testResult: "negative",
+        };
       });
-    } else if (status === "Negative") {
-      rows.forEach((row, idx) => {
-        rows[idx][2] = "Negative";
+      setTests(updatedTests);
+    } else if (status === "positive") {
+      const updatedTests = tests.map((test) => {
+        return {
+          testId: test.testId,
+          dateTested: test.dateTested,
+          testResult: "pending",
+        };
       });
+      setTests(updatedTests);
     }
   };
 
+  const handleTest = (testId, testStatus) => {
+    const selectedTest = tests.find((test) => test.testId === testId);
+    selectedTest.testResult = testStatus;
+    setTests(tests);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const processDate = formData.get("processDate");
+
+    const poolForm = {
+      poolId: props.poolId,
+      poolStatus,
+      processDate,
+      processedBy: props.username,
+    };
+    const encodedPoolForm = JSON.stringify(poolForm);
+
+    axios
+      .post(Constants.PROCESS_POOL_API_URL, { encodedPoolForm })
+      .then((response) => {
+        if (response.data.success) {
+          tests.forEach((test) => {
+            const testForm = {
+              testId: test.testId,
+              testStatus: test.testResult,
+            };
+
+            const encodedTestForm = JSON.stringify(testForm);
+            axios.post(Constants.PROCESS_TEST_API_URL, { encodedTestForm });
+          });
+          toast.success("😎 The pool is processed successfully!");
+        }
+      });
+  };
+
   return (
-    <form className={classes.form} noValidate>
+    <form
+      className={classes.form}
+      noValidate
+      onSubmit={(event) => handleSubmit(event)}
+    >
       <Grid container spacing={2}>
         <Grid item sm={6}>
           <Typography variant="body1">Pool ID:</Typography>
         </Grid>
         <Grid item sm={6}>
-          <Typography variant="body1">11222</Typography>
+          <Typography variant="body1">{props.poolId}</Typography>
         </Grid>
         <Grid item sm={6}>
           <Typography variant="body1">Date Processed:</Typography>
         </Grid>
         <Grid item sm={6}>
-          <Typography variant="body1">{moment().format("l")}</Typography>
+          <TextField
+            autoComplete="pdate"
+            name="processDate"
+            variant="outlined"
+            fullWidth
+            id="processDate"
+            autoFocus
+            size="small"
+          />
         </Grid>
         <Grid item sm={6}>
           <Typography variant="body1">Pool Status:</Typography>
         </Grid>
         <Grid item sm={12}>
           <ButtonGroup color="primary" fullWidth>
-            <Button onClick={() => handlePoolStatus("Positive")}>
+            <Button onClick={() => handlePoolStatus("positive")}>
               Positive
             </Button>
-            <Button onClick={() => handlePoolStatus("Negative")}>
+            <Button onClick={() => handlePoolStatus("negative")}>
               Negative
             </Button>
           </ButtonGroup>
         </Grid>
         <Grid item sm={12}>
-          {poolStatus === "Negative" && (
+          {poolStatus === "negative" && (
             <Table>
               <TableHead>
                 <TableRow>
@@ -97,18 +169,20 @@ export default function SelectPool(props) {
                   <TableCell>Test Result</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row[0]}>
-                    <TableCell>{row[0]}</TableCell>
-                    <TableCell>{row[1]}</TableCell>
-                    <TableCell>{row[2]}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+              {status && (
+                <TableBody>
+                  {tests.map((row) => (
+                    <TableRow key={row.testId}>
+                      <TableCell>{row.testId}</TableCell>
+                      <TableCell>{row.dateTested}</TableCell>
+                      <TableCell>{row.testResult}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              )}
             </Table>
           )}
-          {poolStatus === "Positive" && (
+          {poolStatus === "positive" && (
             <Table>
               <TableHead>
                 <TableRow>
@@ -117,36 +191,45 @@ export default function SelectPool(props) {
                   <TableCell>Test Result</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row[0]}>
-                    <TableCell>{row[0]}</TableCell>
-                    <TableCell>{row[1]}</TableCell>
-                    <TableCell>
-                      <TextField
-                        id="poolStatus"
-                        select
-                        fullWidth
-                        autoFocus
-                        variant="outlined"
-                        defaultValue="All"
-                        size="small"
-                      >
-                        {statusOptions.map((statusOption) => (
-                          <MenuItem key={statusOption} value={statusOption}>
-                            {statusOption}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+              {status && (
+                <TableBody>
+                  {tests.map((row) => (
+                    <TableRow key={row.testId}>
+                      <TableCell>{row.testId}</TableCell>
+                      <TableCell>{row.dateTested}</TableCell>
+                      <TableCell>
+                        <TextField
+                          id="poolStatus"
+                          select
+                          fullWidth
+                          autoFocus
+                          variant="outlined"
+                          defaultValue={row.testResult}
+                          size="small"
+                        >
+                          {statusOptions.map((statusOption) => (
+                            <MenuItem
+                              onClick={() =>
+                                // eslint-disable-next-line prettier/prettier
+                                handleTest(row.testId, statusOption.value)}
+                              key={statusOption.label}
+                              value={statusOption.value}
+                            >
+                              {statusOption.label}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              )}
             </Table>
           )}
         </Grid>
       </Grid>
       <Button
+        type="submit"
         fullWidth
         variant="contained"
         color="primary"

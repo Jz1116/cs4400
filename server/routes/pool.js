@@ -176,4 +176,19 @@ router.get("/tests/:poolId", (req, res) => {
   });
 });
 
+router.post("/process", (req, res) => {
+  const { encodedPoolForm } = req.body;
+  const form = JSON.parse(encodedPoolForm);
+  const { poolId, poolStatus, processDate, processedBy } = form;
+
+  const processPool = `CALL process_pool('${poolId}', '${poolStatus}', '${processDate}', '${processedBy}')`;
+
+  db.query(processPool, true, (error) => {
+    if (error) {
+      console.error(error.message);
+    }
+    res.status(200).json({ success: true });
+  });
+});
+
 module.exports = router;

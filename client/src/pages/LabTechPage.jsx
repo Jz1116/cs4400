@@ -151,7 +151,7 @@ export default function Dashboard(props) {
     ),
     process_pool: (
       <Paper className={classes.paper}>
-        <ProcessPool />
+        <ProcessPool username={props.location.state.name} />
       </Paper>
     ),
     home: (

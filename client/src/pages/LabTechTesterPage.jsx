@@ -144,7 +144,7 @@ export default function Dashboard(props) {
     ),
     my_processed_tests: (
       <Paper className={classes.paper}>
-        <MyProcessedTests />
+        <MyProcessedTests username={props.location.state.name} />
       </Paper>
     ),
     view_pools: (
@@ -154,7 +154,7 @@ export default function Dashboard(props) {
     ),
     process_pool: (
       <Paper className={classes.paper}>
-        <ProcessPool />
+        <ProcessPool username={props.location.state.name} />
       </Paper>
     ),
     change_site: (

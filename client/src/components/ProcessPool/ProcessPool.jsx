@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProcessPool() {
+export default function ProcessPool(props) {
   const classes = useStyles();
   const [poolSelected, setSelected] = useState(false);
   const [poolId, setPoolId] = useState("");
@@ -43,7 +43,11 @@ export default function ProcessPool() {
           <SelectPool setSelected={setSelected} setPoolId={setPoolId} />
         )}
         {poolSelected === true && (
-          <StartProcess setSelected={setSelected} poolId={poolId} />
+          <StartProcess
+            setSelected={setSelected}
+            poolId={poolId}
+            username={props.username}
+          />
         )}
       </div>
     </Container>
