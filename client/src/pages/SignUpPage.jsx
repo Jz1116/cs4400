@@ -13,6 +13,9 @@ import { Link } from "react-router-dom";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { toast } from "react-toastify";
 import axios from "axios";
+import Alert from "@material-ui/lab/Alert";
+import * as EmailValidator from "email-validator";
+import AlertTitle from "@material-ui/lab/AlertTitle";
 import StudentSignUp from "../components/StudentSignUp/StudentSignUp";
 import EmployeeSignUp from "../components/EmployeeSignUp/EmployeeSignUp";
 import * as Constants from "../Constants";
@@ -50,21 +53,84 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp() {
   const classes = useStyles();
   const [status, setStatus] = useState("");
+  const [alertStatus, setAlertStatus] = useState("");
   const [location, setLocation] = useState("East");
   const [housing, setHousing] = useState("Greek Housing");
   const [jobTypes, setJobTypes] = useState([]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    const formData = new FormData(event.target);
+    const firstName = formData.get("firstName");
+    const lastName = formData.get("lastName");
+    const username = formData.get("username");
+    const email = formData.get("email");
+    const password = formData.get("password");
+    const confirmPassword = formData.get("confirmPassword");
 
+    // handle corner cases
+    if (firstName === "") {
+      setAlertStatus("fname");
+      return;
+    }
+    if (lastName === "") {
+      setAlertStatus("lname");
+      return;
+    }
+    if (username === "") {
+      setAlertStatus("username");
+      return;
+    }
+    if (email === "") {
+      setAlertStatus("email");
+      return;
+    }
+    if (email.length < 5) {
+      setAlertStatus("email < 5");
+      return;
+    }
+    if (email.length > 25) {
+      setAlertStatus("email > 25");
+      return;
+    }
+    if (EmailValidator.validate(email) === false) {
+      setAlertStatus("email not valid");
+      return;
+    }
+    if (password === "") {
+      setAlertStatus("password");
+      return;
+    }
+    if (confirmPassword === "") {
+      setAlertStatus("confirmPassword");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setAlertStatus("password not matched");
+      return;
+    }
+    if (password.length < 8) {
+      setAlertStatus("password < 8");
+      return;
+    }
+    const res1 = await axios.get(
+      `${Constants.UNIQUE_USER_API_URL}/${username}`
+    );
+    if (res1.data.isUnique === false) {
+      setAlertStatus("username not unique");
+      return;
+    }
+
+    const res2 = await axios.get(
+      `${Constants.UNIQUE_USER_API_URL}/${firstName}/${lastName}`
+    );
+    if (res2.data.isUnique === false) {
+      setAlertStatus("full name not unique");
+      return;
+    }
+
+    // create account
     if (status === "student") {
-      const formData = new FormData(event.target);
-      const firstName = formData.get("firstName");
-      const lastName = formData.get("lastName");
-      const username = formData.get("username");
-      const email = formData.get("email");
-      const password = formData.get("password");
-
       const form = {
         fname: firstName,
         lname: lastName,
@@ -85,13 +151,14 @@ export default function SignUp() {
           }
         });
     } else if (status === "employee") {
-      const formData = new FormData(event.target);
-      const firstName = formData.get("firstName");
-      const lastName = formData.get("lastName");
-      const username = formData.get("username");
-      const email = formData.get("email");
-      const password = formData.get("password");
       const phoneNum = formData.get("phoneNum");
+      const isLabTech = jobTypes.includes("Lab Tech");
+      const isTester = jobTypes.includes("Site Tester");
+
+      if (isLabTech === false && isTester === false) {
+        setAlertStatus("jobtype");
+        return;
+      }
 
       const form = {
         fname: firstName,
@@ -100,8 +167,8 @@ export default function SignUp() {
         email,
         password,
         phoneNum,
-        isLabTech: jobTypes.includes("Lab Tech"),
-        isTester: jobTypes.includes("Site Tester"),
+        isLabTech,
+        isTester,
       };
 
       const encodedForm = JSON.stringify(form);
@@ -196,7 +263,7 @@ export default function SignUp() {
                 variant="outlined"
                 required
                 fullWidth
-                name="Confirm Password"
+                name="confirmPassword"
                 label="Confirm Password"
                 type="password"
                 id="Confirm Password"
@@ -232,6 +299,82 @@ export default function SignUp() {
           >
             Sign Up
           </Button>
+          {alertStatus === "fname" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Please fill out your first name.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "lname" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Please fill out your last name.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "username" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Please fill out your username.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "email" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Please fill out your email.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "password" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Please fill out your password.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "jobtype" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Please fill out your job type.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "confirmPassword" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Please confirm your password.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "password not matched" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Password do not match.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "password < 8" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>
+                Password must be at least 8 characters in size.
+              </AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "email < 5" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>
+                Email must be at least 5 characters in size.
+              </AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "email > 25" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>
+                Email shall not surpass 25 characters in size.
+              </AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "email not valid" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>The email you entered is not valid.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "username not unique" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Username is not unique.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "full name not unique" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Full name is not unique.</AlertTitle>
+            </Alert>
+          ) : null}
           <Grid container justify="flex-end">
             <Grid item>
               <Link to="/" variant="body2">

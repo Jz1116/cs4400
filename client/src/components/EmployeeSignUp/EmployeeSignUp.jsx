@@ -20,7 +20,6 @@ export default function EmployeeSignUp(props) {
           autoComplete="Phone No."
           name="phoneNum"
           variant="outlined"
-          required
           fullWidth
           id="Phone No."
           label="Phone No."
