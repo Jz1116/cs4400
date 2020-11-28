@@ -113,6 +113,10 @@ export default function SignUp() {
       setAlertStatus("password < 8");
       return;
     }
+    if (status === "") {
+      setAlertStatus("status");
+      return;
+    }
     const res1 = await axios.get(
       `${Constants.UNIQUE_USER_API_URL}/${username}`
     );
@@ -332,6 +336,11 @@ export default function SignUp() {
           {alertStatus === "confirmPassword" ? (
             <Alert severity="warning" onClose={() => setAlertStatus("")}>
               <AlertTitle>Please confirm your password.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "status" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Please select your user type.</AlertTitle>
             </Alert>
           ) : null}
           {alertStatus === "password not matched" ? (

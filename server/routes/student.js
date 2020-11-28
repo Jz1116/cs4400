@@ -34,6 +34,45 @@ router.get("/:username/location", (req, res) => {
   });
 });
 
+router.get("/result/:testId", (req, res) => {
+  const { testId } = req.params;
+  const exploreResult = `CALL explore_results('${testId}')`;
+
+  db.query(exploreResult, true, (error) => {
+    if (error) {
+      res.status(500).send("An unexpected error occurred");
+    }
+  });
+
+  const displayResult = "select * from explore_results_result";
+
+  db.query(displayResult, true, (error, result) => {
+    if (error) {
+      res.status(500).send("An unexpected error occurred");
+    }
+
+    const testResult = result.map((row) => {
+      const formalDate = moment.utc(row.test_date).format("M/D/YY");
+      const formalDateProcessed = moment
+        .utc(row.date_processed)
+        .format("M/D/YY");
+
+      return {
+        testId: row.test_id,
+        testDate: formalDate,
+        timeslot: row.timeslot,
+        testingLocation: row.testing_location,
+        processDate: formalDateProcessed,
+        poolResult: row.pooled_result,
+        individualResult: row.individual_result,
+        processedBy: row.processed_by,
+      };
+    });
+
+    res.status(200).json(testResult);
+  });
+});
+
 router.post("/result", (req, res) => {
   const { encodedForm } = req.body;
   const form = JSON.parse(encodedForm);
@@ -92,45 +131,6 @@ router.post("/result", (req, res) => {
     });
 
     res.status(200).json(studentResult);
-  });
-});
-
-router.get("/result/:testId", (req, res) => {
-  const { testId } = req.params;
-  const exploreResult = `CALL explore_results(${testId})`;
-
-  db.query(exploreResult, true, (error) => {
-    if (error) {
-      res.status(500).send("An unexpected error occurred");
-    }
-  });
-
-  const displayResult = "select * from explore_results_result";
-
-  db.query(displayResult, true, (error, result) => {
-    if (error) {
-      res.status(500).send("An unexpected error occurred");
-    }
-
-    const testResult = result.map((row) => {
-      const formalDate = moment.utc(row.test_date).format("M/D/YY");
-      const formalDateProcessed = moment
-        .utc(row.date_processed)
-        .format("M/D/YY");
-
-      return {
-        testId: row.test_id,
-        testDate: formalDate,
-        timeslot: row.timeslot,
-        testingLocation: row.testing_location,
-        processDate: formalDateProcessed,
-        poolResult: row.pooled_result,
-        individualResult: row.individual_result,
-        processedBy: row.processed_by,
-      };
-    });
-
-    res.status(200).json(testResult);
   });
 });
 
@@ -208,7 +208,7 @@ router.post("/register/appt", (req, res) => {
   const { username, siteName, date, time } = form;
   const testId = generateUniqueId({
     length: 6,
-    useLetters: true,
+    useLetters: false,
   });
 
   const formalDate = moment(date, "M/D/YY").format("YYYY-MM-DD");

@@ -10,6 +10,7 @@ import Grid from "@material-ui/core/Grid";
 import axios from "axios";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
+import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore";
 import Title from "./components/Title";
 import Filter from "./components/Filter";
 import * as Constants from "../../Constants";
@@ -31,9 +32,6 @@ export default function StudentResult(props) {
   const [status, setStatus] = useState(false);
   const [detailMode, setDetailMode] = useState(false);
   const [testResult, setTestResult] = useState([]);
-
-  console.log(result);
-  console.log(testResult);
 
   const initializeResult = () => {
     const form = {
