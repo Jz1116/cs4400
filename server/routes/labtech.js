@@ -4,7 +4,7 @@ const db = require("../mysqldb");
 
 const router = express.Router();
 
-router.post("/test", (req, res) => {
+router.post("/tests", (req, res) => {
   const { encodedForm } = req.body;
   const form = JSON.parse(encodedForm);
   let { startDate, endDate, testStatus } = form;
