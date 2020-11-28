@@ -9,7 +9,7 @@ router.get("/all", (req, res) => {
 
   db.query(getAllTests, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
 
     const tests = result.map((row) => {
@@ -30,14 +30,14 @@ router.get("/:poolId", (req, res) => {
   const testsInPoolResult = `CALL tests_in_pool('${poolId}')`;
   db.query(testsInPoolResult, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
   });
 
   const displayTests = "select * from tests_in_pool_result";
   db.query(displayTests, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
 
     result.sort((a, b) => {
@@ -67,7 +67,7 @@ router.post("/process", (req, res) => {
 
   db.query(processTest, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
     res.status(200).json({ success: true });
   });

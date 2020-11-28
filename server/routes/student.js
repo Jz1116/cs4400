@@ -16,6 +16,7 @@ router.post("/create", (req, res) => {
     if (error) {
       res.status(500).send("An unexpected error occurred");
     }
+
     res.status(200).json({ success: true });
   });
 });

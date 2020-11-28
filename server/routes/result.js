@@ -9,14 +9,14 @@ router.get("/daily", (req, res) => {
 
   db.query(getDailyResult, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
   });
 
   const displayResult = "select * from daily_results_result";
   db.query(displayResult, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
     result.sort((a, b) => {
       return new Date(a.process_date) - new Date(b.process_date);
@@ -71,9 +71,9 @@ router.post("/aggregate", (req, res) => {
 
   const getAggregateResult = `CALL aggregate_results(${location}, ${housing}, ${site}, ${startDate}, ${endDate})`;
 
-  db.query(getAggregateResult, true, (error, result) => {
+  db.query(getAggregateResult, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
   });
 
@@ -81,7 +81,7 @@ router.post("/aggregate", (req, res) => {
 
   db.query(displayResult, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
 
     const aggregateResult = result.map((row) => {

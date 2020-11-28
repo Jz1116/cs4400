@@ -21,7 +21,7 @@ router.post("/create", (req, res) => {
 
   db.query(sql, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
     res.status(200).json({ success: true });
   });

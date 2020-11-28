@@ -18,9 +18,9 @@ router.post("/create", (req, res) => {
 
   const sql = `CALL create_testing_site('${siteName}', '${address}', '${city}', '${usaState}', '${zipCode}', '${location}', '${siteTester}')`;
 
-  db.query(sql, true, (error, results) => {
+  db.query(sql, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
     res.status(200).json({ success: true });
   });
@@ -31,7 +31,7 @@ router.get("/all", (req, res) => {
 
   db.query(getAllSites, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
 
     const sites = [];
