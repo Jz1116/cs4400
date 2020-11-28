@@ -32,6 +32,9 @@ export default function StudentResult(props) {
   const [detailMode, setDetailMode] = useState(false);
   const [testResult, setTestResult] = useState([]);
 
+  console.log(result);
+  console.log(testResult);
+
   const initializeResult = () => {
     const form = {
       startDate: null,
@@ -92,10 +95,15 @@ export default function StudentResult(props) {
       });
   };
 
+  const closeDetailMode = () => {
+    setDetailMode(false);
+    setTestResult([]);
+  };
+
   return (
     <>
       {detailMode === false ? (
-        <>
+        <div>
           <Title>Student View Test Results</Title>
           <Table>
             <TableHead>
@@ -165,9 +173,9 @@ export default function StudentResult(props) {
               </Grid>
             </Grid>
           </form>
-        </>
+        </div>
       ) : (
-        <>
+        <div>
           <Title>Explore Test Result</Title>
           {testResult.length !== 0 && (
             <Table>
@@ -194,11 +202,11 @@ export default function StudentResult(props) {
                   <TableCell>Date Processed</TableCell>
                   <TableCell>{testResult[0].processDate}</TableCell>
                 </TableRow>
-                <TableRow key={testResult[0].poolResult}>
-                  <TableCell>Pooled Result</TableCell>
+                <TableRow key={`${testResult[0].poolResult}pool`}>
+                  <TableCell>Pool Result</TableCell>
                   <TableCell>{testResult[0].poolResult}</TableCell>
                 </TableRow>
-                <TableRow key={testResult[0].individualResult}>
+                <TableRow key={`${testResult[0].individualResult}test`}>
                   <TableCell>Individual Result</TableCell>
                   <TableCell>{testResult[0].individualResult}</TableCell>
                 </TableRow>
@@ -220,14 +228,14 @@ export default function StudentResult(props) {
                 variant="contained"
                 color="primary"
                 className={classes.button}
-                onClick={() => setDetailMode(false)}
+                onClick={() => closeDetailMode()}
                 fullWidth
               >
                 Back
               </Button>
             </Grid>
           </Grid>
-        </>
+        </div>
       )}
     </>
   );
