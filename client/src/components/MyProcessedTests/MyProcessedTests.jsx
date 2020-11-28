@@ -8,11 +8,16 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
+import IconButton from "@material-ui/core/IconButton";
+import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore";
+import * as _ from "lodash";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import Title from "./components/Title";
 import Filter from "./components/Filter";
 import * as Constants from "../../Constants";
+
+const moment = require("moment");
 
 const useStyles = makeStyles((theme) => ({
   containerEnd: {
@@ -32,6 +37,9 @@ export default function MyProcessedTests(props) {
   const [detailMode, setDetailMode] = useState(false);
   const [poolResult, setPoolResult] = useState([]);
   const [poolTests, setPoolTests] = useState([]);
+  const [sortDateTested, setSortDateTested] = useState("");
+  const [sortDateProcessed, setSortDateProcessed] = useState("");
+  const [sortResult, setSortResult] = useState("");
 
   const initializeTests = () => {
     const form = {
@@ -96,6 +104,65 @@ export default function MyProcessedTests(props) {
     });
   };
 
+  // sort corresponding to columns
+  const handleSortDateTested = () => {
+    if (sortDateTested === "" || sortDateTested === "ascending") {
+      const updatedTests = _.cloneDeep(tests);
+      updatedTests.sort(
+        (a, b) =>
+          moment(b.testDate, "M/D/YY").unix() -
+          moment(a.testDate, "M/D/YY").unix()
+      );
+      setSortDateTested("descending");
+      setTests(updatedTests);
+    } else if (sortDateTested === "descending") {
+      const updatedTests = _.cloneDeep(tests);
+      updatedTests.sort(
+        (a, b) =>
+          moment(a.testDate, "M/D/YY").unix() -
+          moment(b.testDate, "M/D/YY").unix()
+      );
+      setSortDateTested("ascending");
+      setTests(updatedTests);
+    }
+  };
+
+  const handleSortDateProcessed = () => {
+    if (sortDateProcessed === "" || sortDateProcessed === "ascending") {
+      const updatedTests = _.cloneDeep(tests);
+      updatedTests.sort(
+        (a, b) =>
+          moment(b.processDate, "M/D/YY").unix() -
+          moment(a.processDate, "M/D/YY").unix()
+      );
+      setSortDateProcessed("descending");
+      setTests(updatedTests);
+    } else if (sortDateProcessed === "descending") {
+      const updatedTests = _.cloneDeep(tests);
+      updatedTests.sort(
+        (a, b) =>
+          moment(a.processDate, "M/D/YY").unix() -
+          moment(b.processDate, "M/D/YY").unix()
+      );
+      setSortDateProcessed("ascending");
+      setTests(updatedTests);
+    }
+  };
+
+  const handleSortResult = () => {
+    if (sortResult === "" || sortResult === "ascending") {
+      const updatedTests = _.cloneDeep(tests);
+      updatedTests.sort((a, b) => a.testStatus.localeCompare(b.testStatus));
+      setSortResult("descending");
+      setTests(updatedTests);
+    } else if (sortResult === "descending") {
+      const updatedTests = _.cloneDeep(tests);
+      updatedTests.sort((a, b) => b.testStatus.localeCompare(a.testStatus));
+      setSortResult("ascending");
+      setTests(updatedTests);
+    }
+  };
+
   return (
     <>
       {detailMode === false ? (
@@ -106,9 +173,30 @@ export default function MyProcessedTests(props) {
               <TableRow>
                 <TableCell>Test ID#</TableCell>
                 <TableCell>Pool ID</TableCell>
-                <TableCell>Date Tested</TableCell>
-                <TableCell>Date Processed</TableCell>
-                <TableCell>Result</TableCell>
+                <TableCell>
+                  <IconButton
+                    onClick={() => handleSortDateTested()}
+                    size="small"
+                  >
+                    <UnfoldMoreIcon fontSize="small" />
+                  </IconButton>
+                  Date Tested
+                </TableCell>
+                <TableCell>
+                  <IconButton
+                    onClick={() => handleSortDateProcessed()}
+                    size="small"
+                  >
+                    <UnfoldMoreIcon fontSize="small" />
+                  </IconButton>
+                  Date Processed
+                </TableCell>
+                <TableCell>
+                  <IconButton onClick={() => handleSortResult()} size="small">
+                    <UnfoldMoreIcon fontSize="small" />
+                  </IconButton>
+                  Result
+                </TableCell>
               </TableRow>
             </TableHead>
             {tests.length !== 0 && (

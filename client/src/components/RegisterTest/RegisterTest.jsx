@@ -9,11 +9,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Checkbox from "@material-ui/core/Checkbox";
 import axios from "axios";
+import * as _ from "lodash";
+import IconButton from "@material-ui/core/IconButton";
+import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import Title from "./components/Title";
 import Filter from "./components/Filter";
 import * as Constants from "../../Constants";
+
+const moment = require("moment");
 
 const useStyles = makeStyles((theme) => ({
   containerEnd: {
@@ -26,12 +31,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function RegisterTest(props) {
+  // states
   const classes = useStyles();
   const [appts, setAppts] = useState([]);
   const [siteName, setSiteName] = useState("All");
   const [sites, setSites] = useState([]);
   const [status, setStatus] = useState(false);
+  const [sortDate, setSortDate] = useState("");
+  const [sortTime, setSortTime] = useState("");
+  const [sortSites, setSortSites] = useState("");
 
+  // initialize appointments
   const initializeAppts = () => {
     const form = {
       username: props.username,
@@ -145,16 +155,80 @@ export default function RegisterTest(props) {
     }
   };
 
+  // handle sorting for each column
+  const handleSortDate = () => {
+    if (sortDate === "" || sortDate === "ascending") {
+      const updatedAppts = _.cloneDeep(appts);
+      updatedAppts.sort(
+        (a, b) =>
+          moment(b.date, "M/D/YY").unix() - moment(a.date, "M/D/YY").unix()
+      );
+      setSortDate("descending");
+      setAppts(updatedAppts);
+    } else if (sortDate === "descending") {
+      const updatedAppts = _.cloneDeep(appts);
+      updatedAppts.sort(
+        (a, b) =>
+          moment(a.date, "M/D/YY").unix() - moment(b.date, "M/D/YY").unix()
+      );
+      setSortDate("ascending");
+      setAppts(updatedAppts);
+    }
+  };
+
+  const handleSortTime = () => {
+    if (sortTime === "" || sortTime === "ascending") {
+      const updatedAppts = _.cloneDeep(appts);
+      updatedAppts.sort((a, b) => a.time.localeCompare(b.time));
+      setSortTime("descending");
+      setAppts(updatedAppts);
+    } else if (sortTime === "descending") {
+      const updatedAppts = _.cloneDeep(appts);
+      updatedAppts.sort((a, b) => b.time.localeCompare(a.time));
+      setSortTime("ascending");
+      setAppts(updatedAppts);
+    }
+  };
+
+  const handleSortSites = () => {
+    if (sortSites === "" || sortSites === "ascending") {
+      const updatedAppts = _.cloneDeep(appts);
+      updatedAppts.sort((a, b) => a.siteName.localeCompare(b.siteName));
+      setSortSites("descending");
+      setAppts(updatedAppts);
+    } else if (sortSites === "descending") {
+      const updatedAppts = _.cloneDeep(appts);
+      updatedAppts.sort((a, b) => b.siteName.localeCompare(a.siteName));
+      setSortSites("ascending");
+      setAppts(updatedAppts);
+    }
+  };
+
   return (
     <>
       <Title>Sign up for a Test</Title>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Time</TableCell>
+            <TableCell>
+              <IconButton onClick={() => handleSortDate()} size="small">
+                <UnfoldMoreIcon fontSize="small" />
+              </IconButton>
+              Date
+            </TableCell>
+            <TableCell>
+              <IconButton onClick={() => handleSortTime()} size="small">
+                <UnfoldMoreIcon fontSize="small" />
+              </IconButton>
+              Time
+            </TableCell>
             <TableCell>Site Address</TableCell>
-            <TableCell>Test Site</TableCell>
+            <TableCell>
+              <IconButton onClick={() => handleSortSites()} size="small">
+                <UnfoldMoreIcon fontSize="small" />
+              </IconButton>
+              Test Site
+            </TableCell>
             <TableCell>Signup</TableCell>
           </TableRow>
         </TableHead>

@@ -15,9 +15,14 @@ import TableRow from "@material-ui/core/TableRow";
 import Checkbox from "@material-ui/core/Checkbox";
 import Alert from "@material-ui/lab/Alert";
 import AlertTitle from "@material-ui/lab/AlertTitle";
+import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore";
+import IconButton from "@material-ui/core/IconButton";
+import * as _ from "lodash";
 import axios from "axios";
 import { toast } from "react-toastify";
 import * as Constants from "../../Constants";
+
+const moment = require("moment");
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,6 +53,7 @@ export default function CreatePool() {
   const [tests, setTests] = useState([]);
   const [getTest, setGetTest] = useState(false);
   const [alertStatus, setAlertStatus] = useState("");
+  const [sortDate, setSortDate] = useState("");
 
   if (getTest === false) {
     axios.get(Constants.ALL_TESTS_API_URL).then((response) => {
@@ -86,6 +92,10 @@ export default function CreatePool() {
       setAlertStatus("selected tests");
       return;
     }
+    if (selectedTests.length > 7) {
+      setAlertStatus("tests > 7");
+      return;
+    }
     const res = await axios.get(`${Constants.POOL_API_URL}/${poolId}`);
     if (res.data.hasPool) {
       setAlertStatus("pool not unique");
@@ -105,6 +115,27 @@ export default function CreatePool() {
           toast.success("😊 A new pool is created!");
         }
       });
+  };
+
+  // sort based on column names
+  const handleSortDate = () => {
+    if (sortDate === "" || sortDate === "ascending") {
+      const updatedTests = _.cloneDeep(tests);
+      updatedTests.sort(
+        (a, b) =>
+          moment(b.date, "M/D/YY").unix() - moment(a.date, "M/D/YY").unix()
+      );
+      setSortDate("descending");
+      setTests(updatedTests);
+    } else if (sortDate === "descending") {
+      const updatedTests = _.cloneDeep(tests);
+      updatedTests.sort(
+        (a, b) =>
+          moment(a.date, "M/D/YY").unix() - moment(b.date, "M/D/YY").unix()
+      );
+      setSortDate("ascending");
+      setTests(updatedTests);
+    }
   };
 
   return (
@@ -141,7 +172,12 @@ export default function CreatePool() {
                 <TableHead>
                   <TableRow>
                     <TableCell>Test ID#</TableCell>
-                    <TableCell>Date Tested</TableCell>
+                    <TableCell>
+                      <IconButton onClick={() => handleSortDate()} size="small">
+                        <UnfoldMoreIcon fontSize="small" />
+                      </IconButton>
+                      Date Tested
+                    </TableCell>
                     <TableCell>Include in Pool</TableCell>
                   </TableRow>
                 </TableHead>
@@ -186,6 +222,11 @@ export default function CreatePool() {
           {alertStatus === "pool not unique" ? (
             <Alert severity="warning" onClose={() => setAlertStatus("")}>
               <AlertTitle>The pool id is not unique.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "tests > 7" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>The number of tests shall not surpass 7.</AlertTitle>
             </Alert>
           ) : null}
         </form>

@@ -4,6 +4,8 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
+import InputLabel from "@material-ui/core/InputLabel";
+import PropTypes from "prop-types";
 import * as Constants from "../../../Constants";
 
 const locationTypes = [
@@ -41,6 +43,12 @@ const useStyles = makeStyles((theme) => ({
   },
   center: {
     textAlign: "center",
+  },
+  labelPadding: {
+    paddingBottom: theme.spacing(1),
+  },
+  gridItemPadding: {
+    paddingTop: theme.spacing(3),
   },
 }));
 
@@ -130,6 +138,9 @@ export default function Filter(props) {
         className={classes.containerMid}
       >
         <Grid item xs={2} sm={2}>
+          <InputLabel className={classes.labelPadding}>
+            Date Processed
+          </InputLabel>
           <TextField
             autoComplete="sdate"
             name="startDate"
@@ -141,16 +152,24 @@ export default function Filter(props) {
           />
         </Grid>
         <Grid item xs={2} sm={2}>
-          <TextField
-            variant="outlined"
-            fullWidth
-            id="endDate"
-            label="End Date"
-            name="endDate"
-            autoComplete="edate"
-          />
+          <div className={classes.gridItemPadding}>
+            <TextField
+              variant="outlined"
+              fullWidth
+              id="endDate"
+              label="End Date"
+              name="endDate"
+              autoComplete="edate"
+            />
+          </div>
         </Grid>
       </Grid>
     </>
   );
 }
+
+Filter.propTypes = {
+  setSite: PropTypes.func.isRequired,
+  setLocation: PropTypes.func.isRequired,
+  setHousing: PropTypes.func.isRequired,
+};

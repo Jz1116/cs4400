@@ -109,6 +109,10 @@ export default function StartProcess(props) {
         return;
       }
     }
+    if (poolStatus === "") {
+      setAlertStatus("pool status");
+      return;
+    }
 
     const poolForm = {
       poolId: props.poolId,
@@ -275,6 +279,11 @@ export default function StartProcess(props) {
           <AlertTitle>
             There is no positive tests in the positive pool.
           </AlertTitle>
+        </Alert>
+      ) : null}
+      {alertStatus === "pool status" ? (
+        <Alert severity="warning" onClose={() => setAlertStatus("")}>
+          <AlertTitle>Please select the status of the pool.</AlertTitle>
         </Alert>
       ) : null}
     </form>

@@ -4,8 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
-
-const siteOptions = ["CRC", "CoC", "CoB", "All"];
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   containerStart: {
@@ -103,3 +102,9 @@ export default function Filter(props) {
     </>
   );
 }
+
+Filter.propTypes = {
+  setSiteName: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  sites: PropTypes.array.isRequired,
+};
