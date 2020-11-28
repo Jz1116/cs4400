@@ -78,9 +78,6 @@ export default function LoginPage() {
       })
       .then((response) => {
         setStatus(response.data.status);
-      })
-      .catch((err) => {
-        console.log(err);
       });
   };
 

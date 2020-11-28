@@ -9,6 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 import Title from "./components/Title";
 import Filter from "./components/Filter";
 import * as Constants from "../../Constants";
@@ -231,3 +232,7 @@ export default function StudentResult(props) {
     </>
   );
 }
+
+StudentResult.propTypes = {
+  username: PropTypes.string.isRequired,
+};

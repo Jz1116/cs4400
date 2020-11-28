@@ -120,6 +120,7 @@ export default function ReassignTester() {
                     getOptionLabel={(option) => option}
                     defaultValue={row.assignedSites}
                     renderInput={(params) => (
+                      // eslint-disable-next-line react/jsx-props-no-spreading
                       <TextField {...params} variant="standard" />
                     )}
                   />

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -111,6 +112,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard(props) {
   const classes = useStyles();
+  const { location } = props;
   const [open, setOpen] = React.useState(true);
   const [loggedIn, setLoggedIn] = React.useState(true);
   const [barStatus, setBarStatus] = React.useState("home");
@@ -144,7 +146,7 @@ export default function Dashboard(props) {
     ),
     my_processed_tests: (
       <Paper className={classes.paper}>
-        <MyProcessedTests username={props.location.state.name} />
+        <MyProcessedTests username={location.state.name} />
       </Paper>
     ),
     view_pools: (
@@ -154,12 +156,12 @@ export default function Dashboard(props) {
     ),
     process_pool: (
       <Paper className={classes.paper}>
-        <ProcessPool username={props.location.state.name} />
+        <ProcessPool username={location.state.name} />
       </Paper>
     ),
     change_site: (
       <Paper className={classes.paper}>
-        <TestingSiteChange username={props.location.state.name} />
+        <TestingSiteChange username={location.state.name} />
       </Paper>
     ),
     view_appointments: (

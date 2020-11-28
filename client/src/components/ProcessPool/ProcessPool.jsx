@@ -3,6 +3,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import PropTypes from "prop-types";
 import SelectPool from "./components/SelectPool";
 import StartProcess from "./components/StartProcess";
 
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProcessPool(props) {
   const classes = useStyles();
+  const { username } = props;
   const [poolSelected, setSelected] = useState(false);
   const [poolId, setPoolId] = useState("");
 
@@ -46,10 +48,14 @@ export default function ProcessPool(props) {
           <StartProcess
             setSelected={setSelected}
             poolId={poolId}
-            username={props.username}
+            username={username}
           />
         )}
       </div>
     </Container>
   );
 }
+
+ProcessPool.propTypes = {
+  username: PropTypes.string.isRequired,
+};

@@ -9,6 +9,7 @@ import Container from "@material-ui/core/Container";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import InputLabel from "@material-ui/core/InputLabel";
 import axios from "axios";
+import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import * as Constants from "../../Constants";
 
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TestingSiteChange(props) {
   const classes = useStyles();
+  const { username } = props;
   const [fullName, setName] = useState("");
   const [status, setStatus] = useState(false);
   const [sites, setSites] = useState([]);
@@ -103,7 +105,7 @@ export default function TestingSiteChange(props) {
               <InputLabel>Username:</InputLabel>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <InputLabel>{props.username}</InputLabel>
+              <InputLabel>{username}</InputLabel>
             </Grid>
             <Grid item xs={12} sm={6}>
               <InputLabel>Full Name:</InputLabel>
@@ -124,6 +126,7 @@ export default function TestingSiteChange(props) {
                   defaultValue={assignedSites}
                   onChange={(event, value) => setSelectedSites(value)}
                   renderInput={(params) => (
+                    // eslint-disable-next-line react/jsx-props-no-spreading
                     <TextField {...params} variant="standard" />
                   )}
                 />
@@ -144,3 +147,7 @@ export default function TestingSiteChange(props) {
     </Container>
   );
 }
+
+TestingSiteChange.propTypes = {
+  username: PropTypes.string.isRequired,
+};

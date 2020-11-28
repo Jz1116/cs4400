@@ -1,6 +1,7 @@
 import React from "react";
 import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "@material-ui/core/Grid";
+import PropTypes from "prop-types";
 import TextField from "@material-ui/core/TextField";
 
 const housingTypes = [
@@ -71,3 +72,8 @@ export default function StudentSignUp(props) {
     </>
   );
 }
+
+StudentSignUp.propTypes = {
+  setLocation: PropTypes.func.isRequired,
+  setHousing: PropTypes.func.isRequired,
+};

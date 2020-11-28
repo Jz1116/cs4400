@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -107,9 +108,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard(props) {
   const classes = useStyles();
+  const { location } = props;
   const [open, setOpen] = React.useState(true);
   const [barStatus, setBarStatus] = React.useState("home");
   const [loggedIn, setLoggedIn] = React.useState(true);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -144,7 +147,7 @@ export default function Dashboard(props) {
     ),
     change_site: (
       <Paper className={classes.paper}>
-        <TestingSiteChange username={props.location.state.name} />
+        <TestingSiteChange username={location.state.name} />
       </Paper>
     ),
     home: (

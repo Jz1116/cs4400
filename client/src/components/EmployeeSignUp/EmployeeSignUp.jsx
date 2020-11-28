@@ -5,6 +5,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
+import PropTypes from "prop-types";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -46,6 +47,7 @@ export default function EmployeeSignUp(props) {
           )}
           renderInput={(params) => (
             <TextField
+              // eslint-disable-next-line react/jsx-props-no-spreading
               {...params}
               variant="outlined"
               fullWidth
@@ -58,3 +60,7 @@ export default function EmployeeSignUp(props) {
     </>
   );
 }
+
+EmployeeSignUp.propTypes = {
+  setJobTypes: PropTypes.func.isRequired,
+};

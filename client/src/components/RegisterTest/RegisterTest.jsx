@@ -10,6 +10,7 @@ import Grid from "@material-ui/core/Grid";
 import Checkbox from "@material-ui/core/Checkbox";
 import axios from "axios";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 import Title from "./components/Title";
 import Filter from "./components/Filter";
 import * as Constants from "../../Constants";
@@ -225,3 +226,7 @@ export default function RegisterTest(props) {
     </>
   );
 }
+
+RegisterTest.propTypes = {
+  username: PropTypes.string.isRequired,
+};
