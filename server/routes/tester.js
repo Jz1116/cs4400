@@ -3,6 +3,36 @@ const db = require("../mysqldb");
 
 const router = express.Router();
 
+router.get("/view", (req, res) => {
+  const viewTesters = `CALL view_testers()`;
+
+  db.query(viewTesters, true, (error, result) => {
+    if (error) {
+      console.error(error.message);
+    }
+  });
+
+  const displayTesters = "select * from view_testers_result";
+
+  db.query(displayTesters, true, (error, result) => {
+    if (error) {
+      console.error(error.message);
+    }
+
+    const testers = result.map((row) => {
+      return {
+        username: row.username,
+        name: row.name,
+        phoneNum: row.phone_number,
+        assignedSites:
+          row.assigned_sites === null ? [] : row.assigned_sites.split(","),
+      };
+    });
+
+    res.status(200).json(testers);
+  });
+});
+
 router.get("/all", (req, res) => {
   const getAllTesters =
     "select concat(fname, ' ', lname) as full_name, username from sitetester join user on sitetester_username = username";
@@ -17,6 +47,36 @@ router.get("/all", (req, res) => {
     });
 
     res.status(200).json(names);
+  });
+});
+
+router.post("/unassign", (req, res) => {
+  const { encodedForm } = req.body;
+  const form = JSON.parse(encodedForm);
+  const { username, siteName } = form;
+
+  const unassignTester = `CALL unassign_tester('${username}', '${siteName}')`;
+
+  db.query(unassignTester, true, (error) => {
+    if (error) {
+      console.error(error.message);
+    }
+    res.status(200).json({ success: true });
+  });
+});
+
+router.post("/assign", (req, res) => {
+  const { encodedForm } = req.body;
+  const form = JSON.parse(encodedForm);
+  const { username, siteName } = form;
+
+  const assignTester = `CALL assign_tester('${username}', '${siteName}')`;
+
+  db.query(assignTester, true, (error) => {
+    if (error) {
+      console.error(error.message);
+    }
+    res.status(200).json({ success: true });
   });
 });
 
@@ -55,36 +115,6 @@ router.get("/:username/sites", (req, res) => {
     });
 
     res.status(200).json(assignedSites);
-  });
-});
-
-router.post("/assign", (req, res) => {
-  const { encodedForm } = req.body;
-  const form = JSON.parse(encodedForm);
-  const { username, siteName } = form;
-
-  const assignTester = `CALL assign_tester('${username}', '${siteName}')`;
-
-  db.query(assignTester, true, (error) => {
-    if (error) {
-      console.error(error.message);
-    }
-    res.status(200).json({ success: true });
-  });
-});
-
-router.post("/unassign", (req, res) => {
-  const { encodedForm } = req.body;
-  const form = JSON.parse(encodedForm);
-  const { username, siteName } = form;
-
-  const unassignTester = `CALL unassign_tester('${username}', '${siteName}')`;
-
-  db.query(unassignTester, true, (error) => {
-    if (error) {
-      console.error(error.message);
-    }
-    res.status(200).json({ success: true });
   });
 });
 
