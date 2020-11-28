@@ -49,6 +49,7 @@ export default function ProcessPool(props) {
             setSelected={setSelected}
             poolId={poolId}
             username={username}
+            disableButton={false}
           />
         )}
       </div>

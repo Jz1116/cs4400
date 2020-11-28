@@ -125,7 +125,7 @@ router.post("/result", (req, res) => {
         date: formalDate,
         dateProcessed:
           formalDateProcessed === "Invalid date" ? null : formalDateProcessed,
-        poolStatus: row.pool_status,
+        poolStatus: row.pool_status === null ? "pending" : row.pool_status,
         testStatus: row.test_status,
       };
     });

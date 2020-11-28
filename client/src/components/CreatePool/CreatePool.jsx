@@ -13,6 +13,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Checkbox from "@material-ui/core/Checkbox";
+import Alert from "@material-ui/lab/Alert";
+import AlertTitle from "@material-ui/lab/AlertTitle";
 import axios from "axios";
 import { toast } from "react-toastify";
 import * as Constants from "../../Constants";
@@ -33,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   submit: {
-    margin: theme.spacing(3, 0, 6),
+    margin: theme.spacing(3, 0, 2),
     textTransform: "none",
   },
   inputLabelPadding: {
@@ -45,6 +47,7 @@ export default function CreatePool() {
   const classes = useStyles();
   const [tests, setTests] = useState([]);
   const [getTest, setGetTest] = useState(false);
+  const [alertStatus, setAlertStatus] = useState("");
 
   if (getTest === false) {
     axios.get(Constants.ALL_TESTS_API_URL).then((response) => {
@@ -63,7 +66,7 @@ export default function CreatePool() {
     setTests(tests);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = new FormData(event.target);
@@ -74,6 +77,20 @@ export default function CreatePool() {
         selectedTests.push(test.testId);
       }
     });
+
+    if (poolId.length === 0) {
+      setAlertStatus("poolId");
+      return;
+    }
+    if (selectedTests.length === 0) {
+      setAlertStatus("selected tests");
+      return;
+    }
+    const res = await axios.get(`${Constants.POOL_API_URL}/${poolId}`);
+    if (res.data.hasPool) {
+      setAlertStatus("pool not unique");
+      return;
+    }
 
     const form = {
       poolId,
@@ -156,6 +173,21 @@ export default function CreatePool() {
           >
             Create Pool
           </Button>
+          {alertStatus === "poolId" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Please enter the pool id.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "selected tests" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Please select the tests.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "pool not unique" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>The pool id is not unique.</AlertTitle>
+            </Alert>
+          ) : null}
         </form>
       </div>
     </Container>

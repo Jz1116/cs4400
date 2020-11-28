@@ -148,7 +148,7 @@ export default function Dashboard(props) {
     ),
     view_pools: (
       <Paper className={classes.paper}>
-        <ViewPools />
+        <ViewPools username={location.state.name} />
       </Paper>
     ),
     process_pool: (

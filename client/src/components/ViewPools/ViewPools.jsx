@@ -5,13 +5,18 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import PropTypes from "prop-types";
+import Container from "@material-ui/core/Container";
 import axios from "axios";
 import { toast } from "react-toastify";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import Title from "./components/Title";
 import Filter from "./components/Filter";
 import * as Constants from "../../Constants";
+import StartProcess from "../ProcessPool/components/StartProcess";
 
 const useStyles = makeStyles((theme) => ({
   containerEnd: {
@@ -21,16 +26,24 @@ const useStyles = makeStyles((theme) => ({
   button: {
     textTransform: "none",
   },
+  paper: {
+    marginTop: theme.spacing(3),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
 }));
 
-export default function ViewPools() {
+export default function ViewPools(props) {
   const classes = useStyles();
+  const { username } = props;
   const [poolStatus, setPoolStatus] = useState("All");
   const [result, setResult] = useState("");
   const [status, setStatus] = useState(false);
   const [detailMode, setDetailMode] = useState(false);
   const [poolResult, setPoolResult] = useState([]);
   const [poolTests, setPoolTests] = useState([]);
+  const [selectedPoolId, setSelectedPoolId] = useState("");
 
   const initializePool = () => {
     const form = {
@@ -80,13 +93,11 @@ export default function ViewPools() {
   };
 
   const handlePoolDetail = (poolId) => {
+    setSelectedPoolId(poolId);
     axios.get(`${Constants.POOL_DATA_API_URL}/${poolId}`).then((response) => {
       setDetailMode(true);
       setPoolResult(response.data);
       if (response.data.length === 0) {
-        toast.warn(
-          "😥 The pool result is not available. Please come back later."
-        );
         setPoolTests([]);
       } else {
         axios.get(`${Constants.POOL_TESTS_API_URL}/${poolId}`).then((res) => {
@@ -94,6 +105,11 @@ export default function ViewPools() {
         });
       }
     });
+  };
+
+  const closeDetailMode = () => {
+    setDetailMode(false);
+    setSelectedPoolId("");
   };
 
   return (
@@ -170,9 +186,24 @@ export default function ViewPools() {
         </>
       ) : (
         <>
-          <Title>Explore Pool Result</Title>
+          {poolResult.length === 0 && (
+            <Container component="main" maxWidth="sm">
+              <CssBaseline />
+              <div className={classes.paper}>
+                <Typography component="h1" variant="h5">
+                  Process Pool
+                </Typography>
+                <StartProcess
+                  username={username}
+                  poolId={selectedPoolId}
+                  disableButton
+                />
+              </div>
+            </Container>
+          )}
           {poolResult.length !== 0 && (
             <>
+              <Title>Explore Pool Result</Title>
               <Title>Pool Metadata</Title>
               <Table>
                 <TableHead>
@@ -231,7 +262,7 @@ export default function ViewPools() {
                 variant="contained"
                 color="primary"
                 className={classes.button}
-                onClick={() => setDetailMode(false)}
+                onClick={() => closeDetailMode()}
                 fullWidth
               >
                 Back
@@ -243,3 +274,7 @@ export default function ViewPools() {
     </>
   );
 }
+
+ViewPools.propTypes = {
+  username: PropTypes.string.isRequired,
+};

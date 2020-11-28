@@ -87,4 +87,21 @@ router.post("/all", (req, res) => {
   });
 });
 
+router.get("/:username", (req, res) => {
+  const { username } = req.params;
+
+  const getAppt = `select * from appointment where username = '${username}'`;
+  db.query(getAppt, true, (error, result) => {
+    if (error) {
+      res.status(500).send("An unexpected error occurred");
+    }
+
+    if (result.length === 0) {
+      res.status(200).json({ hasAppt: false });
+    } else {
+      res.status(200).json({ hasAppt: true });
+    }
+  });
+});
+
 module.exports = router;

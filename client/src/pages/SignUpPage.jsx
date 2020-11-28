@@ -158,9 +158,14 @@ export default function SignUp() {
       const phoneNum = formData.get("phoneNum");
       const isLabTech = jobTypes.includes("Lab Tech");
       const isTester = jobTypes.includes("Site Tester");
+      const phoneNumFormat = /^\d{10}$/;
 
       if (isLabTech === false && isTester === false) {
         setAlertStatus("jobtype");
+        return;
+      }
+      if (phoneNum.length !== 0 && !phoneNum.match(phoneNumFormat)) {
+        setAlertStatus("invalid phone number");
         return;
       }
 
@@ -382,6 +387,11 @@ export default function SignUp() {
           {alertStatus === "full name not unique" ? (
             <Alert severity="warning" onClose={() => setAlertStatus("")}>
               <AlertTitle>Full name is not unique.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "invalid phone number" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Phone number is invalid.</AlertTitle>
             </Alert>
           ) : null}
           <Grid container justify="flex-end">

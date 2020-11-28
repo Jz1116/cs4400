@@ -12,6 +12,9 @@ import TableRow from "@material-ui/core/TableRow";
 import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
 import axios from "axios";
+import Alert from "@material-ui/lab/Alert";
+import AlertTitle from "@material-ui/lab/AlertTitle";
+import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import * as Constants from "../../../Constants";
 
@@ -23,10 +26,6 @@ const statusOptions = [
   {
     value: "negative",
     label: "Negative",
-  },
-  {
-    value: "pending",
-    label: "Pending",
   },
 ];
 
@@ -41,14 +40,17 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonLowerText: {
     textTransform: "none",
+    marginBottom: theme.spacing(3),
   },
 }));
 
-export default function SelectPool(props) {
+export default function StartProcess(props) {
   const classes = useStyles();
+  const { poolId, disableButton } = props;
   const [poolStatus, setPoolStatus] = useState("");
   const [tests, setTests] = useState([]);
   const [status, setStatus] = useState(false);
+  const [alertStatus, setAlertStatus] = useState("");
 
   if (status === false) {
     axios.get(`${Constants.TEST_API_URL}/${props.poolId}`).then((response) => {
@@ -57,10 +59,10 @@ export default function SelectPool(props) {
     });
   }
 
-  const handlePoolStatus = (status) => {
-    setPoolStatus(status);
+  const handlePoolStatus = (selectedPoolStatus) => {
+    setPoolStatus(selectedPoolStatus);
 
-    if (status === "negative") {
+    if (selectedPoolStatus === "negative") {
       const updatedTests = tests.map((test) => {
         return {
           testId: test.testId,
@@ -69,12 +71,12 @@ export default function SelectPool(props) {
         };
       });
       setTests(updatedTests);
-    } else if (status === "positive") {
+    } else if (selectedPoolStatus === "positive") {
       const updatedTests = tests.map((test) => {
         return {
           testId: test.testId,
           dateTested: test.dateTested,
-          testResult: "pending",
+          testResult: "negative",
         };
       });
       setTests(updatedTests);
@@ -92,6 +94,21 @@ export default function SelectPool(props) {
 
     const formData = new FormData(event.target);
     const processDate = formData.get("processDate");
+
+    if (processDate.length === 0) {
+      setAlertStatus("process date");
+      return;
+    }
+    if (poolStatus === "positive") {
+      const positiveTests = tests.find(
+        (test) => test.testResult === "positive"
+      );
+
+      if (positiveTests === undefined) {
+        setAlertStatus("no positive test in positive pool");
+        return;
+      }
+    }
 
     const poolForm = {
       poolId: props.poolId,
@@ -130,7 +147,7 @@ export default function SelectPool(props) {
           <Typography variant="body1">Pool ID:</Typography>
         </Grid>
         <Grid item sm={6}>
-          <Typography variant="body1">{props.poolId}</Typography>
+          <Typography variant="body1">{poolId}</Typography>
         </Grid>
         <Grid item sm={6}>
           <Typography variant="body1">Date Processed:</Typography>
@@ -240,12 +257,32 @@ export default function SelectPool(props) {
       <Button
         variant="outlined"
         color="default"
+        // eslint-disable-next-line react/prop-types
         onClick={() => props.setSelected(false)}
+        disabled={disableButton}
         className={classes.buttonLowerText}
         fullWidth
       >
         Back
       </Button>
+      {alertStatus === "process date" ? (
+        <Alert severity="warning" onClose={() => setAlertStatus("")}>
+          <AlertTitle>Please fill out your process date.</AlertTitle>
+        </Alert>
+      ) : null}
+      {alertStatus === "no positive test in positive pool" ? (
+        <Alert severity="warning" onClose={() => setAlertStatus("")}>
+          <AlertTitle>
+            There is no positive tests in the positive pool.
+          </AlertTitle>
+        </Alert>
+      ) : null}
     </form>
   );
 }
+
+StartProcess.propTypes = {
+  poolId: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  disableButton: PropTypes.bool.isRequired,
+};

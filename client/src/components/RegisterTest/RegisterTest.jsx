@@ -103,8 +103,14 @@ export default function RegisterTest(props) {
     setAppts(appts);
   };
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     let count = 0;
+
+    const res = await axios.get(`${Constants.APPT_API_URL}/${props.username}`);
+    if (res.data.hasAppt) {
+      toast.warn("😢 You have signed up for one appointment.");
+      return;
+    }
 
     appts.forEach((appt) => {
       if (appt.checked) {

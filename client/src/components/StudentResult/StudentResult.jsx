@@ -9,11 +9,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
 import { toast } from "react-toastify";
+import IconButton from "@material-ui/core/IconButton";
 import PropTypes from "prop-types";
 import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore";
+import * as _ from "lodash";
 import Title from "./components/Title";
 import Filter from "./components/Filter";
 import * as Constants from "../../Constants";
+
+const moment = require("moment");
 
 const useStyles = makeStyles((theme) => ({
   containerEnd: {
@@ -32,6 +36,10 @@ export default function StudentResult(props) {
   const [status, setStatus] = useState(false);
   const [detailMode, setDetailMode] = useState(false);
   const [testResult, setTestResult] = useState([]);
+  const [sortApptDate, setSortApptDate] = useState("");
+  const [sortProcessDate, setSortProcessDate] = useState("");
+  const [sortPoolStatus, setSortPoolStatus] = useState("");
+  const [sortTestStatus, setSortTestStatus] = useState("");
 
   const initializeResult = () => {
     const form = {
@@ -98,6 +106,74 @@ export default function StudentResult(props) {
     setTestResult([]);
   };
 
+  const handleSortApptDate = () => {
+    if (sortApptDate === "" || sortApptDate === "ascending") {
+      const updatedResult = _.cloneDeep(result);
+      updatedResult.sort(
+        (a, b) =>
+          moment(b.date, "M/D/YY").unix() - moment(a.date, "M/D/YY").unix()
+      );
+      setSortApptDate("descending");
+      setResult(updatedResult);
+    } else if (sortApptDate === "descending") {
+      const updatedResult = _.cloneDeep(result);
+      updatedResult.sort(
+        (a, b) =>
+          moment(a.date, "M/D/YY").unix() - moment(b.date, "M/D/YY").unix()
+      );
+      setSortApptDate("ascending");
+      setResult(updatedResult);
+    }
+  };
+
+  const handleSortProcessDate = () => {
+    if (sortProcessDate === "" || sortProcessDate === "ascending") {
+      const updatedResult = _.cloneDeep(result);
+      updatedResult.sort(
+        (a, b) =>
+          moment(b.date, "M/D/YY").unix() - moment(a.date, "M/D/YY").unix()
+      );
+      setSortProcessDate("descending");
+      setResult(updatedResult);
+    } else if (sortProcessDate === "descending") {
+      const updatedResult = _.cloneDeep(result);
+      updatedResult.sort(
+        (a, b) =>
+          moment(a.date, "M/D/YY").unix() - moment(b.date, "M/D/YY").unix()
+      );
+      setSortProcessDate("ascending");
+      setResult(updatedResult);
+    }
+  };
+
+  const handleSortPoolStatus = () => {
+    if (sortPoolStatus === "" || sortPoolStatus === "ascending") {
+      const updatedResult = _.cloneDeep(result);
+      updatedResult.sort((a, b) => a.poolStatus.localeCompare(b.poolStatus));
+      setSortPoolStatus("descending");
+      setResult(updatedResult);
+    } else if (sortPoolStatus === "descending") {
+      const updatedResult = _.cloneDeep(result);
+      updatedResult.sort((a, b) => b.poolStatus.localeCompare(a.poolStatus));
+      setSortPoolStatus("ascending");
+      setResult(updatedResult);
+    }
+  };
+
+  const handleSortTestStatus = () => {
+    if (sortTestStatus === "" || sortTestStatus === "ascending") {
+      const updatedResult = _.cloneDeep(result);
+      updatedResult.sort((a, b) => a.testStatus.localeCompare(b.testStatus));
+      setSortTestStatus("descending");
+      setResult(updatedResult);
+    } else if (sortTestStatus === "descending") {
+      const updatedResult = _.cloneDeep(result);
+      updatedResult.sort((a, b) => b.testStatus.localeCompare(a.testStatus));
+      setSortTestStatus("ascending");
+      setResult(updatedResult);
+    }
+  };
+
   return (
     <>
       {detailMode === false ? (
@@ -107,10 +183,39 @@ export default function StudentResult(props) {
             <TableHead>
               <TableRow>
                 <TableCell>Test ID#</TableCell>
-                <TableCell>Timeslot Date</TableCell>
-                <TableCell>Date Processed</TableCell>
-                <TableCell>Pool Status</TableCell>
-                <TableCell>Status</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => handleSortApptDate()} size="small">
+                    <UnfoldMoreIcon fontSize="small" />
+                  </IconButton>
+                  Timeslot Date
+                </TableCell>
+                <TableCell>
+                  <IconButton
+                    onClick={() => handleSortProcessDate()}
+                    size="small"
+                  >
+                    <UnfoldMoreIcon fontSize="small" />
+                  </IconButton>
+                  Date Processed
+                </TableCell>
+                <TableCell>
+                  <IconButton
+                    onClick={() => handleSortPoolStatus()}
+                    size="small"
+                  >
+                    <UnfoldMoreIcon fontSize="small" />
+                  </IconButton>
+                  Pool Status
+                </TableCell>
+                <TableCell>
+                  <IconButton
+                    onClick={() => handleSortTestStatus()}
+                    size="small"
+                  >
+                    <UnfoldMoreIcon fontSize="small" />
+                  </IconButton>
+                  Status
+                </TableCell>
               </TableRow>
             </TableHead>
             {result.length !== 0 && (
