@@ -14,7 +14,7 @@ router.post("/create", (req, res) => {
 
   db.query(registerStudent, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
     res.status(200).json({ success: true });
   });
@@ -26,7 +26,7 @@ router.get("/:username/location", (req, res) => {
   const getLocation = `select location from student where student_username = '${username}'`;
   db.query(getLocation, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
 
     res.status(200).json(result[0].location);
@@ -60,7 +60,7 @@ router.post("/result", (req, res) => {
 
   db.query(getStudentResult, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
   });
 
@@ -68,7 +68,7 @@ router.post("/result", (req, res) => {
 
   db.query(displayResult, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
     result.sort((a, b) => {
       return new Date(a.timeslot_date) - new Date(b.timeslot_date);
@@ -100,7 +100,7 @@ router.get("/result/:testId", (req, res) => {
 
   db.query(exploreResult, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
   });
 
@@ -108,7 +108,7 @@ router.get("/result/:testId", (req, res) => {
 
   db.query(displayResult, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
 
     const testResult = result.map((row) => {
@@ -170,7 +170,7 @@ router.post("/appts", (req, res) => {
 
   db.query(testSignUp, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
   });
 
@@ -178,7 +178,7 @@ router.post("/appts", (req, res) => {
 
   db.query(displayAppts, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
 
     result.sort((a, b) => {
@@ -216,7 +216,7 @@ router.post("/register/appt", (req, res) => {
 
   db.query(sql, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
     res.status(200).json({ success: true });
   });

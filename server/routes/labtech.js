@@ -7,7 +7,8 @@ const router = express.Router();
 router.post("/test", (req, res) => {
   const { encodedForm } = req.body;
   const form = JSON.parse(encodedForm);
-  let { startDate, endDate, testStatus, username } = form;
+  let { startDate, endDate, testStatus } = form;
+  const { username } = form;
 
   const str1 = "'";
 
@@ -30,7 +31,7 @@ router.post("/test", (req, res) => {
 
   db.query(retrieveTests, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
   });
 
@@ -39,7 +40,7 @@ router.post("/test", (req, res) => {
 
   db.query(displayResult, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
 
     result.sort((a, b) => {

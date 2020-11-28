@@ -6,9 +6,9 @@ const router = express.Router();
 router.get("/view", (req, res) => {
   const viewTesters = `CALL view_testers()`;
 
-  db.query(viewTesters, true, (error, result) => {
+  db.query(viewTesters, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
   });
 
@@ -16,7 +16,7 @@ router.get("/view", (req, res) => {
 
   db.query(displayTesters, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
 
     const testers = result.map((row) => {
@@ -39,7 +39,7 @@ router.get("/all", (req, res) => {
 
   db.query(getAllTesters, true, (error, result) => {
     if (error) {
-      console.log(error);
+      res.status(500).send("An unexpected error occurred");
     }
 
     const names = result.map((row) => {
@@ -59,7 +59,7 @@ router.post("/unassign", (req, res) => {
 
   db.query(unassignTester, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
     res.status(200).json({ success: true });
   });
@@ -74,7 +74,7 @@ router.post("/assign", (req, res) => {
 
   db.query(assignTester, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
     res.status(200).json({ success: true });
   });
@@ -86,7 +86,7 @@ router.get("/:username", (req, res) => {
 
   db.query(getFullName, true, (error, result) => {
     if (error) {
-      console.log(error);
+      res.status(500).send("An unexpected error occurred");
     }
 
     res.status(200).json(result[0]);
@@ -99,14 +99,14 @@ router.get("/:username/sites", (req, res) => {
   const getAssignedSites = `CALL tester_assigned_sites('${username}')`;
   db.query(getAssignedSites, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
   });
 
   const displaySites = "select * from tester_assigned_sites_result";
   db.query(displaySites, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
 
     const assignedSites = [];

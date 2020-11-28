@@ -9,7 +9,7 @@ router.get("/all/pending", (req, res) => {
 
   db.query(getPendingPools, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
     const poolIds = [];
     result.forEach((row) => {
@@ -28,7 +28,7 @@ router.post("/create", (req, res) => {
 
   db.query(createPool, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
   });
 
@@ -38,7 +38,7 @@ router.post("/create", (req, res) => {
 
     db.query(assignToPool, true, (error) => {
       if (error) {
-        console.error(error.message);
+        res.status(500).send("An unexpected error occurred");
       }
     });
   }
@@ -77,7 +77,7 @@ router.post("/result", (req, res) => {
 
   db.query(viewPool, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
   });
 
@@ -85,7 +85,7 @@ router.post("/result", (req, res) => {
 
   db.query(displayResult, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
 
     result.sort((a, b) => {
@@ -115,7 +115,7 @@ router.get("/data/:poolId", (req, res) => {
 
   db.query(poolMetadataResult, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
   });
 
@@ -123,7 +123,7 @@ router.get("/data/:poolId", (req, res) => {
 
   db.query(displayResult, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
 
     const poolMetadata = result.map((row) => {
@@ -147,14 +147,14 @@ router.get("/tests/:poolId", (req, res) => {
   const testsInPoolResult = `CALL tests_in_pool('${poolId}')`;
   db.query(testsInPoolResult, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
   });
 
   const displayTests = "select * from tests_in_pool_result";
   db.query(displayTests, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
 
     result.sort((a, b) => {
@@ -185,7 +185,7 @@ router.post("/process", (req, res) => {
 
   db.query(processPool, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
     res.status(200).json({ success: true });
   });

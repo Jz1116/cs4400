@@ -13,7 +13,7 @@ router.post("/create", (req, res) => {
 
   db.query(sql, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
     res.status(200).json({ success: true });
   });
@@ -56,7 +56,7 @@ router.post("/all", (req, res) => {
 
   db.query(getAppts, true, (error) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
   });
 
@@ -64,7 +64,7 @@ router.post("/all", (req, res) => {
 
   db.query(displayAppts, true, (error, result) => {
     if (error) {
-      console.error(error.message);
+      res.status(500).send("An unexpected error occurred");
     }
 
     result.sort((a, b) => {
