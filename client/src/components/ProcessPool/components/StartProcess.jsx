@@ -18,6 +18,8 @@ import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import * as Constants from "../../../Constants";
 
+const moment = require("moment");
+
 const statusOptions = [
   {
     value: "positive",
@@ -83,6 +85,15 @@ export default function StartProcess(props) {
     }
   };
 
+  // get the largest date
+  const getMaxDate = (dates) => {
+    dates.sort(
+      (a, b) => moment(b, "M/D/YY").unix() - moment(a, "M/D/YY").unix()
+    );
+
+    return dates[0];
+  };
+
   const handleTest = (testId, testStatus) => {
     const selectedTest = tests.find((test) => test.testId === testId);
     selectedTest.testResult = testStatus;
@@ -94,6 +105,17 @@ export default function StartProcess(props) {
 
     const formData = new FormData(event.target);
     const processDate = formData.get("processDate");
+    const dates = [];
+
+    tests.forEach((test) => {
+      dates.push(test.dateTested);
+    });
+
+    const maxDate = getMaxDate(dates);
+    if (!(moment(processDate, "M/D/YY") > moment(maxDate, "M/D/YY"))) {
+      setAlertStatus("process date before max date");
+      return;
+    }
 
     if (processDate.length === 0) {
       setAlertStatus("process date");
@@ -284,6 +306,11 @@ export default function StartProcess(props) {
       {alertStatus === "pool status" ? (
         <Alert severity="warning" onClose={() => setAlertStatus("")}>
           <AlertTitle>Please select the status of the pool.</AlertTitle>
+        </Alert>
+      ) : null}
+      {alertStatus === "process date before max date" ? (
+        <Alert severity="warning" onClose={() => setAlertStatus("")}>
+          <AlertTitle>Process date is before the latest test date.</AlertTitle>
         </Alert>
       ) : null}
     </form>

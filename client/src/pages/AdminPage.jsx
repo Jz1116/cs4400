@@ -135,7 +135,7 @@ export default function Dashboard() {
       </Paper>
     ),
     create_an_appointment: (
-      <Paper className={classes.paper}>
+      <Paper className={classes.paper} jobType="admin">
         <CreateAppt />
       </Paper>
     ),

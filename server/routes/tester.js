@@ -118,4 +118,23 @@ router.get("/:username/sites", (req, res) => {
   });
 });
 
+router.post("/workat", (req, res) => {
+  const { encodedForm2 } = req.body;
+  const form = JSON.parse(encodedForm2);
+  const { username, siteName } = form;
+
+  const checkWorkAt = `select * from sitetester join working_at on sitetester_username = username where sitetester_username = '${username}' and site = '${siteName}'`;
+  db.query(checkWorkAt, true, (error, result) => {
+    if (error) {
+      res.status(500).send("An unexpected error occurred");
+    }
+
+    if (result.length === 0) {
+      res.status(200).json({ workAt: false });
+    } else {
+      res.status(200).json({ workAt: true });
+    }
+  });
+});
+
 module.exports = router;

@@ -171,7 +171,7 @@ export default function Dashboard(props) {
     ),
     create_an_appointment: (
       <Paper className={classes.paper}>
-        <CreateAppt />
+        <CreateAppt username={location.state.name} jobType="tester" />
       </Paper>
     ),
     home: (

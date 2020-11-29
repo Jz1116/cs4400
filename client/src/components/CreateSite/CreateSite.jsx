@@ -8,6 +8,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+import Alert from "@material-ui/lab/Alert";
+import AlertTitle from "@material-ui/lab/AlertTitle";
 import { toast } from "react-toastify";
 import * as Constants from "../../Constants";
 
@@ -29,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   submit: {
-    margin: theme.spacing(3, 0, 6),
+    margin: theme.spacing(3, 0, 2),
     textTransform: "none",
   },
 }));
@@ -40,15 +42,15 @@ export default function CreateSite() {
   const [siteTester, setTester] = useState("");
   const [usaState, setUsaState] = useState("AL");
   const [testers, setTesters] = useState([]);
+  const [alertStatus, setAlertStatus] = useState("");
 
   if (testers.length === 0) {
     axios.get(Constants.ALL_TESTERS_API_URL).then((response) => {
-      setTester(response.data[0][1]);
       setTesters(response.data);
     });
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = new FormData(event.target);
@@ -56,6 +58,42 @@ export default function CreateSite() {
     const address = formData.get("siteAddress");
     const city = formData.get("city");
     const zipCode = formData.get("zipCode");
+
+    // handle corner cases
+    if (siteName === "") {
+      setAlertStatus("site name");
+      return;
+    }
+    if (address === "") {
+      setAlertStatus("address");
+      return;
+    }
+    if (city === "") {
+      setAlertStatus("city");
+      return;
+    }
+    if (zipCode === "") {
+      setAlertStatus("zip code");
+      return;
+    }
+    if (siteTester === "") {
+      setAlertStatus("tester");
+      return;
+    }
+    if (zipCode.length !== 5) {
+      setAlertStatus("not valid zip code");
+      return;
+    }
+    // eslint-disable-next-line no-restricted-globals
+    if (isNaN(zipCode)) {
+      setAlertStatus("not valid zip code");
+      return;
+    }
+    const res = await axios.post(Constants.UNIQUE_SITE_API_URL, { siteName });
+    if (!res.data.isUnique) {
+      setAlertStatus("site name not unique");
+      return;
+    }
 
     const form = {
       siteName,
@@ -189,7 +227,6 @@ export default function CreateSite() {
                   autoFocus
                   variant="outlined"
                   required
-                  defaultValue={testers[0]}
                 >
                   {testers.map((tester) => (
                     <MenuItem
@@ -213,6 +250,41 @@ export default function CreateSite() {
           >
             Create Site
           </Button>
+          {alertStatus === "site name" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Please fill out the site name.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "address" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Please fill out the street address.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "city" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Please fill out the city.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "zip code" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Please fill out the zip code.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "tester" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>Please select the tester.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "not valid zip code" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>The zip code shall be 5 digits.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "site name not unique" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>The site name is not unique.</AlertTitle>
+            </Alert>
+          ) : null}
         </form>
       </div>
     </Container>

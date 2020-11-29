@@ -179,12 +179,12 @@ export default function RegisterTest(props) {
   const handleSortTime = () => {
     if (sortTime === "" || sortTime === "ascending") {
       const updatedAppts = _.cloneDeep(appts);
-      updatedAppts.sort((a, b) => a.time.localeCompare(b.time));
+      updatedAppts.sort((a, b) => b.time.localeCompare(a.time));
       setSortTime("descending");
       setAppts(updatedAppts);
     } else if (sortTime === "descending") {
       const updatedAppts = _.cloneDeep(appts);
-      updatedAppts.sort((a, b) => b.time.localeCompare(a.time));
+      updatedAppts.sort((a, b) => a.time.localeCompare(b.time));
       setSortTime("ascending");
       setAppts(updatedAppts);
     }
@@ -193,12 +193,12 @@ export default function RegisterTest(props) {
   const handleSortSites = () => {
     if (sortSites === "" || sortSites === "ascending") {
       const updatedAppts = _.cloneDeep(appts);
-      updatedAppts.sort((a, b) => a.siteName.localeCompare(b.siteName));
+      updatedAppts.sort((a, b) => b.siteName.localeCompare(a.siteName));
       setSortSites("descending");
       setAppts(updatedAppts);
     } else if (sortSites === "descending") {
       const updatedAppts = _.cloneDeep(appts);
-      updatedAppts.sort((a, b) => b.siteName.localeCompare(a.siteName));
+      updatedAppts.sort((a, b) => a.siteName.localeCompare(b.siteName));
       setSortSites("ascending");
       setAppts(updatedAppts);
     }

@@ -45,4 +45,36 @@ router.get("/all", (req, res) => {
   });
 });
 
+router.post("/only", async (req, res) => {
+  const { site } = req.body;
+
+  const countWorkAt = `select * from working_at where site = '${site}'`;
+  db.query(countWorkAt, true, (error, result) => {
+    if (error) {
+      res.status(500).send("An unexpected error occurred");
+    }
+    if (result.length === 1) {
+      res.status(200).json({ success: true, site });
+    } else {
+      res.status(200).json({ success: false, site });
+    }
+  });
+});
+
+router.post("/unique", (req, res) => {
+  const { siteName } = req.body;
+
+  const checkUnique = `select * from site where site_name = '${siteName}'`;
+  db.query(checkUnique, true, (error, result) => {
+    if (error) {
+      res.status(500).send("An unexpected error occurred");
+    }
+    if (result.length === 0) {
+      res.status(200).json({ isUnique: true });
+    } else {
+      res.status(200).json({ isUnique: false });
+    }
+  });
+});
+
 module.exports = router;

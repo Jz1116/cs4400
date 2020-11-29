@@ -8,6 +8,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+import PropTypes from "prop-types";
+import Alert from "@material-ui/lab/Alert";
+import AlertTitle from "@material-ui/lab/AlertTitle";
 import { toast } from "react-toastify";
 import * as Constants from "../../Constants";
 
@@ -27,15 +30,17 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   submit: {
-    margin: theme.spacing(3, 0, 6),
+    margin: theme.spacing(3, 0, 2),
     textTransform: "none",
   },
 }));
 
-export default function TestingSiteForm() {
+export default function CreateAppt(props) {
   const classes = useStyles();
+  const { jobType } = props;
   const [site, setSite] = useState("");
   const [sites, setSites] = useState([]);
+  const [alertStatus, setAlertStatus] = useState("");
 
   if (sites.length === 0) {
     axios.get(Constants.ALL_SITES_API_URL).then((response) => {
@@ -44,7 +49,7 @@ export default function TestingSiteForm() {
     });
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = new FormData(event.target);
@@ -58,6 +63,30 @@ export default function TestingSiteForm() {
     };
 
     const encodedForm = JSON.stringify(form);
+
+    const res1 = await axios.post(Constants.UNIQUE_APPT_API_URL, {
+      encodedForm,
+    });
+    if (!res1.data.isUnique) {
+      setAlertStatus("appt not unique");
+      return;
+    }
+
+    if (jobType === "tester") {
+      const form2 = {
+        username: props.username,
+        siteName: site,
+      };
+      const encodedForm2 = JSON.stringify(form2);
+      const res2 = await axios.post(Constants.TESTER_WORKAT_API_URL, {
+        encodedForm2,
+      });
+      if (!res2.data.workAt) {
+        setAlertStatus("tester not work at site");
+        return;
+      }
+    }
+
     axios
       .post(Constants.CREATE_APPT_API_URL, { encodedForm })
       .then((response) => {
@@ -136,8 +165,25 @@ export default function TestingSiteForm() {
           >
             Create Appointment
           </Button>
+          {alertStatus === "appt not unique" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>The appointment is not unique.</AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "tester not work at site" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>
+                The tester does not work at this testing site.
+              </AlertTitle>
+            </Alert>
+          ) : null}
         </form>
       </div>
     </Container>
   );
 }
+
+CreateAppt.propTypes = {
+  jobType: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+};

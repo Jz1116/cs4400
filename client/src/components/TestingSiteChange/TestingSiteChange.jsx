@@ -10,6 +10,8 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import InputLabel from "@material-ui/core/InputLabel";
 import axios from "axios";
 import PropTypes from "prop-types";
+import AlertTitle from "@material-ui/lab/AlertTitle";
+import Alert from "@material-ui/lab/Alert";
 import { toast } from "react-toastify";
 import * as Constants from "../../Constants";
 
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   submit: {
-    margin: theme.spacing(3, 0, 6),
+    margin: theme.spacing(3, 0, 2),
     textTransform: "none",
   },
 }));
@@ -38,6 +40,7 @@ export default function TestingSiteChange(props) {
   const [sites, setSites] = useState([]);
   const [assignedSites, setAssignedSites] = useState([]);
   const [selectedSites, setSelectedSites] = useState([]);
+  const [alertStatus, setAlertStatus] = useState("");
 
   if (status === false) {
     axios
@@ -58,7 +61,7 @@ export default function TestingSiteChange(props) {
       });
   }
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     const originalSet = new Set(assignedSites);
     const newSet = new Set(selectedSites);
 
@@ -77,16 +80,46 @@ export default function TestingSiteChange(props) {
       }
     });
 
-    addedSites.forEach((site) => {
-      const form = { username: props.username, siteName: site };
-      const encodedForm = JSON.stringify(form);
-      axios.post(Constants.ASSIGN_TESTER_API_URL, { encodedForm });
+    const promises = [];
+    deletedSites.forEach((site) => {
+      promises.push(
+        axios.post(Constants.SITE_WITH_ONLY_ONE_TESTER_API_URL, {
+          site,
+        })
+      );
     });
 
-    deletedSites.forEach((site) => {
+    const canUnAssign = await Promise.all(promises);
+    const siteWithOneTester = [];
+    canUnAssign.forEach((res) => {
+      if (res.data.success) {
+        siteWithOneTester.push(res.data.site);
+      }
+    });
+
+    if (siteWithOneTester.length !== 0) {
+      setAlertStatus("cannot unassign tester");
+      siteWithOneTester.forEach((site) => {
+        selectedSites.push(site);
+      });
+      addedSites.forEach((site) => {
+        const idx = selectedSites.indexOf(site);
+        selectedSites.splice(idx, 1);
+      });
+      setAssignedSites(selectedSites);
+      return;
+    }
+
+    addedSites.forEach(async (site) => {
       const form = { username: props.username, siteName: site };
       const encodedForm = JSON.stringify(form);
-      axios.post(Constants.UNASSIGN_TESTER_API_URL, { encodedForm });
+      await axios.post(Constants.ASSIGN_TESTER_API_URL, { encodedForm });
+    });
+
+    deletedSites.forEach(async (site) => {
+      const form = { username: props.username, siteName: site };
+      const encodedForm = JSON.stringify(form);
+      await axios.post(Constants.UNASSIGN_TESTER_API_URL, { encodedForm });
     });
     setAssignedSites(selectedSites);
     toast.success("😏 The assigned sites are updated!");
@@ -142,6 +175,14 @@ export default function TestingSiteChange(props) {
           >
             Update
           </Button>
+          {alertStatus === "cannot unassign tester" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>
+                You are the only one in one of the sites. The operation failed.
+                Please try again.
+              </AlertTitle>
+            </Alert>
+          ) : null}
         </form>
       </div>
     </Container>

@@ -90,7 +90,7 @@ router.post("/all", (req, res) => {
 router.get("/:username", (req, res) => {
   const { username } = req.params;
 
-  const getAppt = `select * from appointment where username = '${username}'`;
+  const getAppt = `select * from test t join appointment a on t.appt_site = a.site_name and t.appt_date = a.appt_date and t.appt_time = a.appt_time where username = '${username}' and test_status = 'pending'`;
   db.query(getAppt, true, (error, result) => {
     if (error) {
       res.status(500).send("An unexpected error occurred");
@@ -100,6 +100,25 @@ router.get("/:username", (req, res) => {
       res.status(200).json({ hasAppt: false });
     } else {
       res.status(200).json({ hasAppt: true });
+    }
+  });
+});
+
+router.post("/unique", (req, res) => {
+  const { encodedForm } = req.body;
+  const form = JSON.parse(encodedForm);
+  const { siteName, date, time } = form;
+
+  const getAppt = `select * from appointment where site_name = '${siteName}' and appt_date = '${date}' and appt_time = '${time}'`;
+  db.query(getAppt, true, (error, result) => {
+    if (error) {
+      res.status(500).send("An unexpected error occurred");
+    }
+
+    if (result.length === 0) {
+      res.status(200).json({ isUnique: true });
+    } else {
+      res.status(200).json({ isUnique: false });
     }
   });
 });
