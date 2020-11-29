@@ -11,6 +11,8 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
 import { toast } from "react-toastify";
+import AlertTitle from "@material-ui/lab/AlertTitle";
+import Alert from "@material-ui/lab/Alert";
 import _ from "lodash";
 import Title from "./components/Title";
 import * as Constants from "../../Constants";
@@ -31,6 +33,8 @@ export default function ReassignTester() {
   const [testersInfo, setTestersInfo] = useState([]);
   const [updatedTestersInfo, setUpdatedTestersInfo] = useState([]);
   const [sites, setSites] = useState([]);
+  const [alertStatus, setAlertStatus] = useState("");
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   if (status === false) {
     axios.get(Constants.VIEW_TESTERS_API_URL).then((response) => {
@@ -44,12 +48,45 @@ export default function ReassignTester() {
     setStatus(true);
   }
 
-  const handleSites = (username, assignedSites) => {
+  const handleSites = async (username, updatedSites) => {
     const selectedTesterInfo = updatedTestersInfo.find(
       (testerInfo) => testerInfo.username === username
     );
-    selectedTesterInfo.assignedSites = assignedSites;
-    setUpdatedTestersInfo(updatedTestersInfo);
+    const selectedSites = selectedTesterInfo.assignedSites;
+    const set = new Set(updatedSites);
+    const deletedSites = [];
+    selectedSites.forEach((site) => {
+      if (!set.has(site)) {
+        deletedSites.push(site);
+      }
+    });
+    if (deletedSites.length === 0) {
+      selectedTesterInfo.assignedSites = updatedSites;
+      setUpdatedTestersInfo(updatedTestersInfo);
+    } else {
+      const deletedSite = deletedSites[0];
+      const response = await axios.post(
+        Constants.SITE_WITH_ONLY_ONE_TESTER_API_URL,
+        {
+          site: deletedSite,
+        }
+      );
+      if (response.data.success) {
+        setButtonDisabled(true);
+        updatedSites.push(deletedSite);
+        selectedTesterInfo.assignedSites = updatedSites;
+        setUpdatedTestersInfo(updatedTestersInfo);
+        setAlertStatus("cannot unassign tester");
+      } else {
+        selectedTesterInfo.assignedSites = updatedSites;
+        setUpdatedTestersInfo(updatedTestersInfo);
+      }
+    }
+  };
+
+  const handleCloseAlert = () => {
+    setAlertStatus("");
+    setButtonDisabled(false);
   };
 
   const handleUpdate = () => {
@@ -142,10 +179,21 @@ export default function ReassignTester() {
             color="primary"
             className={classes.button}
             fullWidth
+            disabled={buttonDisabled}
             onClick={() => handleUpdate()}
           >
             Update
           </Button>
+        </Grid>
+        <Grid sm={12}>
+          {alertStatus === "cannot unassign tester" ? (
+            <Alert severity="warning" onClose={() => handleCloseAlert()}>
+              <AlertTitle>
+                This tester is the only one in the site. The operation failed.
+                Please try again.
+              </AlertTitle>
+            </Alert>
+          ) : null}
         </Grid>
       </Grid>
     </>
