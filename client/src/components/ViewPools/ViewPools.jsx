@@ -148,12 +148,12 @@ export default function ViewPools(props) {
       const updatedResult = _.cloneDeep(result);
       updatedResult.sort((a, b) => {
         if (a.processedBy === null) {
-          return -1;
-        }
-        if (b.processedBy === null) {
           return 1;
         }
-        return a.processedBy.localeCompare(b.processedBy);
+        if (b.processedBy === null) {
+          return -1;
+        }
+        return b.processedBy.localeCompare(a.processedBy);
       });
       setSortProcessedBy("descending");
       setResult(updatedResult);
@@ -161,12 +161,12 @@ export default function ViewPools(props) {
       const updatedResult = _.cloneDeep(result);
       updatedResult.sort((a, b) => {
         if (a.processedBy === null) {
-          return 1;
-        }
-        if (b.processedBy === null) {
           return -1;
         }
-        return b.processedBy.localeCompare(a.processedBy);
+        if (b.processedBy === null) {
+          return 1;
+        }
+        return a.processedBy.localeCompare(b.processedBy);
       });
       setSortProcessedBy("ascending");
       setResult(updatedResult);
@@ -176,12 +176,12 @@ export default function ViewPools(props) {
   const handleSortPoolStatus = () => {
     if (sortPoolStatus === "" || sortPoolStatus === "ascending") {
       const updatedResult = _.cloneDeep(result);
-      updatedResult.sort((a, b) => a.poolStatus.localeCompare(b.poolStatus));
+      updatedResult.sort((a, b) => b.poolStatus.localeCompare(a.poolStatus));
       setSortPoolStatus("descending");
       setResult(updatedResult);
     } else if (sortPoolStatus === "descending") {
       const updatedResult = _.cloneDeep(result);
-      updatedResult.sort((a, b) => b.poolStatus.localeCompare(a.poolStatus));
+      updatedResult.sort((a, b) => a.poolStatus.localeCompare(b.poolStatus));
       setSortPoolStatus("ascending");
       setResult(updatedResult);
     }

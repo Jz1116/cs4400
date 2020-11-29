@@ -106,6 +106,7 @@ export default function StudentResult(props) {
     setTestResult([]);
   };
 
+  // sort based on column names
   const handleSortApptDate = () => {
     if (sortApptDate === "" || sortApptDate === "ascending") {
       const updatedResult = _.cloneDeep(result);
@@ -149,12 +150,12 @@ export default function StudentResult(props) {
   const handleSortPoolStatus = () => {
     if (sortPoolStatus === "" || sortPoolStatus === "ascending") {
       const updatedResult = _.cloneDeep(result);
-      updatedResult.sort((a, b) => a.poolStatus.localeCompare(b.poolStatus));
+      updatedResult.sort((a, b) => b.poolStatus.localeCompare(a.poolStatus));
       setSortPoolStatus("descending");
       setResult(updatedResult);
     } else if (sortPoolStatus === "descending") {
       const updatedResult = _.cloneDeep(result);
-      updatedResult.sort((a, b) => b.poolStatus.localeCompare(a.poolStatus));
+      updatedResult.sort((a, b) => a.poolStatus.localeCompare(b.poolStatus));
       setSortPoolStatus("ascending");
       setResult(updatedResult);
     }
@@ -163,12 +164,12 @@ export default function StudentResult(props) {
   const handleSortTestStatus = () => {
     if (sortTestStatus === "" || sortTestStatus === "ascending") {
       const updatedResult = _.cloneDeep(result);
-      updatedResult.sort((a, b) => a.testStatus.localeCompare(b.testStatus));
+      updatedResult.sort((a, b) => b.testStatus.localeCompare(a.testStatus));
       setSortTestStatus("descending");
       setResult(updatedResult);
     } else if (sortTestStatus === "descending") {
       const updatedResult = _.cloneDeep(result);
-      updatedResult.sort((a, b) => b.testStatus.localeCompare(a.testStatus));
+      updatedResult.sort((a, b) => a.testStatus.localeCompare(b.testStatus));
       setSortTestStatus("ascending");
       setResult(updatedResult);
     }

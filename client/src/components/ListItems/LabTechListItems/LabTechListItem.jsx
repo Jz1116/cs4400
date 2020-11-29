@@ -7,6 +7,7 @@ import BarChartIcon from "@material-ui/icons/BarChart";
 import AddIcon from "@material-ui/icons/Add";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
+import PropTypes from "prop-types";
 import HomeIcon from "@material-ui/icons/Home";
 
 export default function LabTechListItems(props) {
@@ -59,3 +60,7 @@ export default function LabTechListItems(props) {
     </div>
   );
 }
+
+LabTechListItems.propType = {
+  handleBarStatus: PropTypes.func.isRequired,
+};

@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Filter(props) {
   const classes = useStyles();
+  const { sites } = props;
   return (
     <>
       <Grid container spacing={3} className={classes.containerStart}>
@@ -39,7 +40,7 @@ export default function Filter(props) {
             variant="outlined"
             defaultValue="All"
           >
-            {props.sites.map((site) => (
+            {sites.map((site) => (
               <MenuItem
                 key={site}
                 value={site}

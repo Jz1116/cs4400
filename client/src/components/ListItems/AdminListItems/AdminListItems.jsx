@@ -5,6 +5,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import AddIcon from "@material-ui/icons/Add";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
+import PropTypes from "prop-types";
 import HomeIcon from "@material-ui/icons/Home";
 import EditIcon from "@material-ui/icons/Edit";
 
@@ -57,3 +58,7 @@ export default function AdminListItems(props) {
     </div>
   );
 }
+
+AdminListItems.propTypes = {
+  handleBarStatus: PropTypes.func.isRequired,
+};

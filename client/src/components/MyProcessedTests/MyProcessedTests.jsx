@@ -152,12 +152,12 @@ export default function MyProcessedTests(props) {
   const handleSortResult = () => {
     if (sortResult === "" || sortResult === "ascending") {
       const updatedTests = _.cloneDeep(tests);
-      updatedTests.sort((a, b) => a.testStatus.localeCompare(b.testStatus));
+      updatedTests.sort((a, b) => b.testStatus.localeCompare(a.testStatus));
       setSortResult("descending");
       setTests(updatedTests);
     } else if (sortResult === "descending") {
       const updatedTests = _.cloneDeep(tests);
-      updatedTests.sort((a, b) => b.testStatus.localeCompare(a.testStatus));
+      updatedTests.sort((a, b) => a.testStatus.localeCompare(b.testStatus));
       setSortResult("ascending");
       setTests(updatedTests);
     }

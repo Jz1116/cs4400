@@ -3,6 +3,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 import InputLabel from "@material-ui/core/InputLabel";
 
 const statusOptions = [
@@ -109,3 +110,7 @@ export default function Filter(props) {
     </>
   );
 }
+
+Filter.propTypes = {
+  setPoolStatus: PropTypes.func.isRequired,
+};

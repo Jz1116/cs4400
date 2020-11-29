@@ -7,6 +7,7 @@ import AddIcon from "@material-ui/icons/Add";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import EditIcon from "@material-ui/icons/Edit";
 import HomeIcon from "@material-ui/icons/Home";
+import PropTypes from "prop-types";
 
 export default function TesterListItems(props) {
   const { handleBarStatus } = props;
@@ -52,3 +53,7 @@ export default function TesterListItems(props) {
     </div>
   );
 }
+
+TesterListItems.propTypes = {
+  handleBarStatus: PropTypes.func.isRequired,
+};

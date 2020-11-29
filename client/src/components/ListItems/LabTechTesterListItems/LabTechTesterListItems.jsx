@@ -8,6 +8,7 @@ import AddIcon from "@material-ui/icons/Add";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import EditIcon from "@material-ui/icons/Edit";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
+import PropTypes from "prop-types";
 import HomeIcon from "@material-ui/icons/Home";
 
 export default function LabTechTesterListItems(props) {
@@ -78,3 +79,7 @@ export default function LabTechTesterListItems(props) {
     </div>
   );
 }
+
+LabTechTesterListItems.propTypes = {
+  handleBarStatus: PropTypes.func.isRequired,
+};

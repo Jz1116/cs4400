@@ -9,6 +9,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import axios from "axios";
+import PropTypes from "prop-types";
 import * as Constants from "../../../Constants";
 
 const useStyles = makeStyles((theme) => ({
@@ -145,3 +146,8 @@ export default function Filter(props) {
     </>
   );
 }
+
+Filter.propTypes = {
+  setAvailableStatus: PropTypes.func.isRequired,
+  setSiteName: PropTypes.func.isRequired,
+};

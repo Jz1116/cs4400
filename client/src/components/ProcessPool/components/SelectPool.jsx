@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 import * as Constants from "../../../Constants";
 
 const useStyles = makeStyles((theme) => ({
@@ -73,3 +74,8 @@ export default function SelectPool(props) {
     </form>
   );
 }
+
+SelectPool.propTypes = {
+  setPoolId: PropTypes.func.isRequired,
+  setSelected: PropTypes.func.isRequired,
+};

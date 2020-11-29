@@ -6,6 +6,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import EventIcon from "@material-ui/icons/Event";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import HomeIcon from "@material-ui/icons/Home";
+import PropTypes from "prop-types";
 
 export default function StudentListItems(props) {
   const { handleBarStatus } = props;
@@ -45,3 +46,7 @@ export default function StudentListItems(props) {
     </div>
   );
 }
+
+StudentListItems.propTypes = {
+  handleBarStatus: PropTypes.func.isRequired,
+};

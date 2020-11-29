@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
+import PropTypes from "prop-types";
 
 const statusOptions = [
   {
@@ -96,3 +97,7 @@ export default function Filter(props) {
     </>
   );
 }
+
+Filter.propTypes = {
+  setTestStatus: PropTypes.func.isRequired,
+};
