@@ -112,7 +112,7 @@ export default function StartProcess(props) {
     });
 
     const maxDate = getMaxDate(dates);
-    if (!(moment(processDate, "M/D/YY") > moment(maxDate, "M/D/YY"))) {
+    if (moment(processDate, "M/D/YY").isBefore(moment(maxDate, "M/D/YY"))) {
       setAlertStatus("process date before max date");
       return;
     }

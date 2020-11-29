@@ -61,6 +61,6 @@ export default function LabTechListItems(props) {
   );
 }
 
-LabTechListItems.propType = {
+LabTechListItems.propTypes = {
   handleBarStatus: PropTypes.func.isRequired,
 };
