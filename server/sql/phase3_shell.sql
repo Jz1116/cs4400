@@ -213,7 +213,7 @@ BEGIN
                         AND (i_end_date >= pool.process_date OR i_end_date IS NULL)
         group by t.test_status
     union
-        select t.test_status as test_status, count(*) as num_of_test, round(count(*) * 100 / (select count(*) + 0.00001 from test t
+        select t.test_status as test_status, count(*) as num_of_test, round(count(*) * 100 / (select count(*) from test t
         join appointment a on (t.appt_date = a.appt_date and t.appt_time = a.appt_time and t.appt_site = a.site_name)
         join student on a.username = student.student_username
         join pool on t.pool_id = pool.pool_id
