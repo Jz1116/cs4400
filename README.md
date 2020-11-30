@@ -41,10 +41,10 @@ After that, the database needs to be set up in the MySQL Workbench.
 3. Initialize the database with db_init.sql
 4. Add stored procedures and functions to the database with phase3_shell.sql (This sql file needs to be run because it contains other functions besides phase 3 stored procedures)
 
-The server also needs a .env file. Since this file contains private information for connecting to the sql database in mysql workbench (such as username, password, port number, etc), it is not included in the Github repo. Therefore, you need to set up the .env file and put the file **under the server folder**.
-You need to create 2 variables in the .env file. 
-One is `MYSQL_PASSWORD`. It contains the password to access your local MySQLWorkbench. The general format to type is `MYSQL_PASSWORD=123456`.
-Another one is `DATABASE`. The variable stores the name of the database we use for this application. The general format would be `DATABASE=covidtest_fall2020`.
+The server also needs a .env file. Since this file contains private information for connecting to the sql database in mysql workbench (such as username, password, port number, etc), it is not included in the Github repo. Therefore, you need to set up the .env file and put the file **under the server folder**.\
+You need to create 2 variables in the .env file. \
+One is `MYSQL_PASSWORD`. It contains the password to access your local MySQLWorkbench. The general format to type is `MYSQL_PASSWORD=123456`.\
+Another one is `DATABASE`. The variable stores the name of the database we use for this application. The general format would be `DATABASE=covidtest_fall2020`.\
 
 
 ### Run instructions:
