@@ -109,10 +109,6 @@ export default function SignUp() {
       setAlertStatus("password not matched");
       return;
     }
-    if (password.length < 8) {
-      setAlertStatus("password < 8");
-      return;
-    }
     if (status === "") {
       setAlertStatus("status");
       return;
@@ -351,13 +347,6 @@ export default function SignUp() {
           {alertStatus === "password not matched" ? (
             <Alert severity="warning" onClose={() => setAlertStatus("")}>
               <AlertTitle>Password do not match.</AlertTitle>
-            </Alert>
-          ) : null}
-          {alertStatus === "password < 8" ? (
-            <Alert severity="warning" onClose={() => setAlertStatus("")}>
-              <AlertTitle>
-                Password must be at least 8 characters in size.
-              </AlertTitle>
             </Alert>
           ) : null}
           {alertStatus === "email < 5" ? (

@@ -192,7 +192,7 @@ BEGIN
 
     -- Type solution below
 
-		select t.test_status as test_status, count(*) as num_of_test, round(count(*) * 100 / (select count(*) from test t
+        select t.test_status as test_status, count(*) as num_of_test, round(count(*) * 100 / (select count(*) from test t
         join appointment a on (t.appt_date = a.appt_date and t.appt_time = a.appt_time and t.appt_site = a.site_name)
         join student on a.username = student.student_username
         join pool on t.pool_id = pool.pool_id
@@ -200,8 +200,7 @@ BEGIN
                         AND (student.housing_type = i_housing OR i_housing is NULL)
                         AND (a.site_name = i_testing_site OR i_testing_site is NULL)
                         AND (i_start_date <= pool.process_date OR i_start_date IS NULL)
-                        AND (i_end_date >= pool.process_date OR i_end_date IS NULL)
-            AND pool.process_date is not null), 2) as percentage
+                        AND (i_end_date >= pool.process_date OR i_end_date IS NULL)), 2) as percentage
         from test t
         join appointment a on (t.appt_date = a.appt_date and t.appt_time = a.appt_time and t.appt_site = a.site_name)
         join student on a.username = student.student_username
@@ -217,13 +216,11 @@ BEGIN
         join appointment a on (t.appt_date = a.appt_date and t.appt_time = a.appt_time and t.appt_site = a.site_name)
         join student on a.username = student.student_username
         join pool on t.pool_id = pool.pool_id
-        where t.test_status = 'pending'
-                        AND ((i_end_date IS NULL AND process_date IS NULL AND i_start_date IS NOT NULL and (student.location = i_location OR i_location is NULL)
-            and (student.housing_type = i_housing OR i_housing is NULL)
-            and (a.site_name = i_testing_site OR i_testing_site is NULL))
-            OR (i_end_date IS NOT NULL AND process_date IS NOT NULL and (student.location = i_location OR i_location is NULL)
-            and (student.housing_type = i_housing OR i_housing is NULL)
-            and (a.site_name = i_testing_site OR i_testing_site is NULL)))), 2) as percentage
+        where (student.location = i_location OR i_location is NULL)
+                        AND (student.housing_type = i_housing OR i_housing is NULL)
+                        AND (a.site_name = i_testing_site OR i_testing_site is NULL)
+                        AND (i_start_date <= pool.process_date OR i_start_date IS NULL)
+                        AND (i_end_date >= pool.process_date OR i_end_date IS NULL)), 2) as percentage
         from test t
         join appointment a on (t.appt_date = a.appt_date and t.appt_time = a.appt_time and t.appt_site = a.site_name)
         join student on a.username = student.student_username

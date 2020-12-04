@@ -72,6 +72,11 @@ export default function CreateAppt(props) {
       return;
     }
 
+    if (time.length === 0) {
+      setAlertStatus("empty time");
+      return;
+    }
+
     if (jobType === "tester") {
       const form2 = {
         username: props.username,
@@ -175,6 +180,11 @@ export default function CreateAppt(props) {
               <AlertTitle>
                 The tester does not work at this testing site.
               </AlertTitle>
+            </Alert>
+          ) : null}
+          {alertStatus === "empty time" ? (
+            <Alert severity="warning" onClose={() => setAlertStatus("")}>
+              <AlertTitle>The time is empty.</AlertTitle>
             </Alert>
           ) : null}
         </form>
